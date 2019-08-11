@@ -58,6 +58,8 @@ Issues or questions can be done in https://github.com/jslsolucoes/nginx-admin/is
 
 <h2>For premium support or to comercial presentation of nginx admin enterprise edition (with lot of improvments like real time dashboard control, fully integration with previous nginx installation,lets encrypt ssl certificate integration support)  please contact : jonatan@jslsolucoes.com</h2>
 
+---
+
 # build guide
 
 > use mvn to build first
