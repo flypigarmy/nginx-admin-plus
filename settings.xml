@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
 
 <settings>
+
+    <proxies>
+        <proxy>
+            <id>alilang</id>
+            <active>true</active>
+            <protocol>http</protocol>
+            <host>localhost</host>
+            <port>13658</port>
+            <nonProxyHosts>maven.aliyun.com</nonProxyHosts>
+        </proxy>
+    </proxies>
+
     <mirrors>
         <mirror>
             <id>alimaven</id>
