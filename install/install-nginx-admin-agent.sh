@@ -9,7 +9,7 @@ fi
 #install pre-dependencies if has no one
 yum -y update
 yum -y install epel-release
-yum -y install psmisc initscripts java-1.8.0-openjdk-devel.x86_64 nginx unzip sudo wget visudo vim firewalld
+yum -y install psmisc initscripts java-1.8.0-openjdk-devel.x86_64 nginx unzip sudo wget vim firewalld
 
 #stop default nginx
 service nginx stop
