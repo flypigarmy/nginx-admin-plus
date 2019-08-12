@@ -1,11 +1,12 @@
 package com.jslsolucoes.nginx.admin.database;
 
 public enum DatabaseDriver {
-	ORACLE("oracle"), H2("h2"),MARIADB("mariadb"),MYSQL("mysql"),POSTGRESQL("postgresql"),SQLSERVER("sqlserver");
+	ORACLE("oracle"), H2("h2"), MARIADB("mariadb"), MYSQL("mysql"), POSTGRESQL("postgresql"), SQLSERVER("sqlserver"), OCEANBASE(
+			"oceanbase");
 
 	private String driverName;
 
-	private DatabaseDriver(String driverName) {
+	DatabaseDriver(String driverName) {
 		this.driverName = driverName;
 	}
 
