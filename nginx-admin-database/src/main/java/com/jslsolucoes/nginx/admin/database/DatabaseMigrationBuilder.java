@@ -1,28 +1,5 @@
 package com.jslsolucoes.nginx.admin.database;
 
-import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.jslsolucoes.nginx.admin.database.model.DatabaseHistory;
 import com.jslsolucoes.nginx.admin.database.repository.DatabaseHistoryRepository;
 import com.jslsolucoes.nginx.admin.database.repository.impl.DatabaseHistoryRepositoryImpl;
@@ -30,20 +7,34 @@ import com.jslsolucoes.nginx.admin.database.repository.impl.driver.DriverQuery;
 import com.jslsolucoes.nginx.admin.database.repository.impl.driver.H2DriverQuery;
 import com.jslsolucoes.nginx.admin.database.repository.impl.driver.MariaDbDriverQuery;
 import com.jslsolucoes.nginx.admin.database.repository.impl.driver.MysqlDriverQuery;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.net.URI;
+import java.nio.file.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class DatabaseMigrationBuilder {
 
-	private String host = "localhost";
-	private Integer port;
-	private String database = "public";
-	private String username;
-	private String password;
-	private String location = "~";
-	private DatabaseDriver databaseDriver;
-	private String table = "db_migrate_history";
-	private static final Logger logger = LoggerFactory.getLogger(DatabaseMigrationBuilder.class);
-	private List<String> classpaths;
-	private Properties properties = new Properties();
+	private              String         host       = "localhost";
+	private              Integer        port;
+	private              String         database   = "public";
+	private              String         username;
+	private              String         password;
+	private              String         location   = "~";
+	private              DatabaseDriver databaseDriver;
+	private              String         table      = "db_migrate_history";
+	private static final Logger         logger     = LoggerFactory.getLogger(DatabaseMigrationBuilder.class);
+	private              List<String>   classpaths;
+	private              Properties     properties = new Properties();
 
 	static {
 		try {
@@ -65,7 +56,7 @@ public class DatabaseMigrationBuilder {
 	public static DatabaseMigrationBuilder newBuilder() {
 		return new DatabaseMigrationBuilder();
 	}
-	
+
 	public DatabaseMigrationBuilder withLocation(String location) {
 		this.location = location;
 		return this;
@@ -75,21 +66,21 @@ public class DatabaseMigrationBuilder {
 		this.host = host;
 		return this;
 	}
-	
+
 	public DatabaseMigrationPropertiesBuilder withProperties() {
-		return DatabaseMigrationPropertiesBuilder.newBuilder(this,properties);
+		return DatabaseMigrationPropertiesBuilder.newBuilder(this, properties);
 	}
-	
+
 	public DatabaseMigrationBuilder withProperties(Properties properties) {
 		this.properties = properties;
 		return this;
 	}
-	
+
 	public DatabaseMigrationBuilder withDatabase(String database) {
 		this.database = database;
 		return this;
 	}
-	
+
 	public DatabaseMigrationBuilder withPort(Integer port) {
 		this.port = port;
 		return this;
@@ -130,27 +121,31 @@ public class DatabaseMigrationBuilder {
 				logger.info("Table " + table + " already exists in database " + database + ". Nothing to do.");
 			}
 			DatabaseHistory databaseHistory = databaseHistoryRepository.current(database, table);
-			logger.info("Current version is {}",databaseHistory.getName());
-			
+			logger.info("Current version is {}", databaseHistory.getName());
+
 			databaseHistoryRepository.init(database);
-			
+
 			for (DatabaseSqlResource fileSequence : files()) {
 				if (fileSequence.getVersion() > databaseHistory.getVersion()) {
-					StringTokenizer stringTokenizer = new StringTokenizer(
-							new String(Files.readAllBytes(fileSequence.getPath()), "UTF-8"), ";");
+					StringTokenizer stringTokenizer = new StringTokenizer(new String(Files.readAllBytes(fileSequence.getPath()),
+							"UTF-8"), ";");
 					while (stringTokenizer.hasMoreTokens()) {
 						String statement = stringTokenizer.nextToken();
-						if(!StringUtils.isEmpty(statement) && !StringUtils.isBlank(statement)){
-							try (PreparedStatement preparedStatement = connection
-									.prepareStatement(statement)) {
+						if (!StringUtils.isEmpty(statement) && !StringUtils.isBlank(statement)) {
+							try (PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
 								preparedStatement.execute();
 							}
 						}
 					}
-					logger.info("File {} was applyed successfully on database ",fileSequence.getPath().getFileName());
-					databaseHistoryRepository.insert(database, table,fileSequence.getPath().getFileName().toString(),fileSequence.getVersion());
+					logger.info("File {} was applyed successfully on database ", fileSequence.getPath().getFileName());
+					databaseHistoryRepository.insert(database,
+							table,
+							fileSequence.getPath().getFileName().toString(),
+							fileSequence.getVersion());
 				} else {
-					logger.info("File {} was ignored because is lower or equals than current version {}",fileSequence.getPath().getFileName().toString(),databaseHistory.getName());
+					logger.info("File {} was ignored because is lower or equals than current version {}",
+							fileSequence.getPath().getFileName().toString(),
+							databaseHistory.getName());
 				}
 			}
 		} catch (Exception e) {
@@ -166,7 +161,7 @@ public class DatabaseMigrationBuilder {
 	private DriverQuery driverQuery() {
 		if (databaseDriver.equals(DatabaseDriver.H2)) {
 			return new H2DriverQuery();
-		} else if (databaseDriver.equals(DatabaseDriver.MYSQL)) {
+		} else if (databaseDriver.equals(DatabaseDriver.MYSQL) || databaseDriver.equals(DatabaseDriver.OCEANBASE)) {
 			return new MysqlDriverQuery();
 		} else if (databaseDriver.equals(DatabaseDriver.MARIADB)) {
 			return new MariaDbDriverQuery();
@@ -178,8 +173,8 @@ public class DatabaseMigrationBuilder {
 		try {
 			String urlConnection = urlConnection();
 			logger.info("url connection: {}, username: {}", urlConnection, username);
-			properties.setProperty("user",username);
-			properties.setProperty("password",password);
+			properties.setProperty("user", username);
+			properties.setProperty("password", password);
 			return DriverManager.getConnection(urlConnection, properties);
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -190,8 +185,8 @@ public class DatabaseMigrationBuilder {
 		if (databaseDriver.equals(DatabaseDriver.ORACLE)) {
 			return "jdbc:oracle:thin:@" + host + ":" + port + "/" + database;
 		} else if (databaseDriver.equals(DatabaseDriver.POSTGRESQL)) {
-			return "jdbc:postgresql://"+ host +":" + port + "/" + database;
-		} else if (databaseDriver.equals(DatabaseDriver.MYSQL)) {
+			return "jdbc:postgresql://" + host + ":" + port + "/" + database;
+		} else if (databaseDriver.equals(DatabaseDriver.MYSQL) || databaseDriver.equals(DatabaseDriver.OCEANBASE)) {
 			return "jdbc:mysql://" + host + ":" + port + "/" + database;
 		} else if (databaseDriver.equals(DatabaseDriver.MARIADB)) {
 			return "jdbc:mariadb://" + host + ":" + port + "/" + database;
@@ -215,8 +210,8 @@ public class DatabaseMigrationBuilder {
 		return locations().stream().flatMap(location -> {
 			try {
 				return Files.walk(location).filter(path -> !Files.isDirectory(path)).map(path -> {
-					Matcher matcher = Pattern
-							.compile("v\\.([0-9]{1,})(\\.([0-9]{1,}))?(\\.([0-9]{1,}))?(\\.([0-9]{1,}))?")
+					Matcher matcher = Pattern.compile(
+							"v\\.([0-9]{1,})(\\.([0-9]{1,}))?(\\.([0-9]{1,}))?(\\.([0-9]{1,}))?")
 							.matcher(path.getFileName().toString());
 					if (matcher.find()) {
 						Integer group1 = group(matcher.group(1));
@@ -231,10 +226,7 @@ public class DatabaseMigrationBuilder {
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-		}).sorted((c1, c2) -> {
-			return c1.getVersion().compareTo(c2.getVersion());
-		}).collect(Collectors.toList());
-
+		}).sorted(Comparator.comparing(DatabaseSqlResource::getVersion)).collect(Collectors.toList());
 	}
 
 	private List<Path> locations() {
@@ -242,8 +234,7 @@ public class DatabaseMigrationBuilder {
 			try {
 				URI uri = getClass().getResource(location).toURI();
 				if (uri.getScheme().equals("jar")) {
-					try (FileSystem fileSystem = FileSystems.newFileSystem(uri,
-							Collections.<String, Object>emptyMap())) {
+					try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
 						return fileSystem.provider().getPath(uri);
 					}
 				} else {
