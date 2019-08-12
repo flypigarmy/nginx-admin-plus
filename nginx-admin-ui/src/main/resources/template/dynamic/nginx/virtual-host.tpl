@@ -31,6 +31,8 @@ server {
     <#list virtualHost.locations as virtualHostLocation>
     	
     	location ${ virtualHostLocation.path } {
+    	    set $queue_priority ${ virtualHostLocation.queuePriority };
+    	    set $queue_handler ${ virtualHostLocation.queueHandler };
       		proxy_pass  http://${ virtualHostLocation.upstream.name };
     	}
     	

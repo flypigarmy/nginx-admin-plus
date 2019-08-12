@@ -19,6 +19,9 @@
 			<html:gridColumn label="{virtualHost.https}" booleanType="true" exportable="true">
 				${ virtualHost.https }
 			</html:gridColumn>
+            <html:gridColumn label="{virtualHost.queueSize}" booleanType="false" exportable="true">
+                ${ virtualHost.queueSize }
+            </html:gridColumn>
 			<html:gridColumn label="{ssl.common.name}" exportable="true">
 				${ virtualHost.sslCertificate.commonName }
 			</html:gridColumn>
@@ -26,6 +29,12 @@
 				<html:grid data="${ virtualHost.locations }" var="virtualHostLocation" simple="true">
 					<html:gridColumn label="{virtualHost.location}">
 						${ virtualHostLocation.path }
+					</html:gridColumn>
+					<html:gridColumn label="{virtualHost.queuePriority}">
+						${ virtualHostLocation.queuePriority }
+					</html:gridColumn>
+					<html:gridColumn label="{virtualHost.queueHandler}">
+						${ virtualHostLocation.queueHandler }
 					</html:gridColumn>
 					<html:gridColumn label="{upstream.name}">
 						${ virtualHostLocation.upstream.name }

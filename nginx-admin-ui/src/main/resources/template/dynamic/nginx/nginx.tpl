@@ -38,7 +38,9 @@ http {
 	    gzip 		on;
 	    gzip_types 	application/json application/x-javascript application/javascript application/xml application/xml+rss text/plain text/css text/xml text/javascript image/svg+xml;
     </#if>
-    
+
+    # init_worker_by_lua_file ../lualib/ob/ob_queue_init.lua
+
     include  	/opt/nginx-admin/settings/upstream/*.conf;
 	include  	/opt/nginx-admin/settings/virtual-host/*.conf;
     

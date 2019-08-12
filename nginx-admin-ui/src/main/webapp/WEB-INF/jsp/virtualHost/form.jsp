@@ -35,7 +35,13 @@
 					</html:listGroupItem>
 				</html:listGroup>
 			</html:formGroup>
-			
+
+            <html:formGroup label="{virtualHost.queueSize}" required="true">
+                <html:input value="${ virtualHost.queueSize }" name="queueSize"
+                    type="number" maxLength="9999"
+                    placeholder="{virtualHost.queueSize.placeholder}" required="true"></html:input>
+            </html:formGroup>
+
 			<html:formGroup label="{ssl.common.name}" required="true"
 				visible="${ virtualHost.https == 1  }">
 				<html:select cssClass="ssl" required="true" name="idSslCertificate"
@@ -44,8 +50,8 @@
 					<html:option value="${ sslCertificate.id }">${ sslCertificate.commonName }</html:option>
 				</html:select>
 			</html:formGroup>
-			
-			
+
+
 			<html:formGroup>
 				<html:detailTable atLeast="1" data="${ virtualHost.aliases  }"
 					var="virtualHostAlias" label="{virtualHost.aliases}">
@@ -64,6 +70,19 @@
 						<html:input name="locations[]"
 							value="${ virtualHostLocation.path }"
 							placeholder="{virtualHost.location.placeholder}" required="true"></html:input>
+					</html:detailTableColumn>
+					<html:detailTableColumn label="{virtualHost.queuePriority}"
+						required="true">
+						<html:input name="queuePriorities[]"
+							value="${ virtualHostLocation.queuePriority }"
+							type="number"
+							placeholder="{virtualHost.queuePriority.placeholder}" required="true"></html:input>
+					</html:detailTableColumn>
+					<html:detailTableColumn label="{virtualHost.queueHandler}"
+						required="true">
+						<html:input name="queueHandlers[]"
+							value="${ virtualHostLocation.queueHandler }"
+							placeholder="{virtualHost.queueHandler.placeholder}" required="true"></html:input>
 					</html:detailTableColumn>
 					<html:detailTableColumn label="{upstream.name}" required="true">
 						<html:select required="true" name="upstreams[]"

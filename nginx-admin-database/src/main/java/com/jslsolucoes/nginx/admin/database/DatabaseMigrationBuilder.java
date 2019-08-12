@@ -149,6 +149,7 @@ public class DatabaseMigrationBuilder {
 				}
 			}
 		} catch (Exception e) {
+			logger.error("migrate failed: ", e);
 			throw new RuntimeException(e);
 		}
 		return this;

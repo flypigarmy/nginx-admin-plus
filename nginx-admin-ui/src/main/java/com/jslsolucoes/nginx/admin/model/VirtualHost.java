@@ -1,23 +1,11 @@
 package com.jslsolucoes.nginx.admin.model;
 
+import org.apache.commons.lang.StringUtils;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import org.apache.commons.lang.StringUtils;
 
 @SuppressWarnings("serial")
 @Entity
@@ -31,6 +19,9 @@ public class VirtualHost implements Serializable {
 
 	@Column(name = "https")
 	private Integer https;
+
+	@Column(name = "queue_size")
+	private Long queueSize;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_nginx")
@@ -58,8 +49,19 @@ public class VirtualHost implements Serializable {
 		this.id = id;
 	}
 
+	public VirtualHost(Long id, Integer https, Long queueSize, SslCertificate sslCertificate,
+					   ResourceIdentifier resourceIdentifier, Nginx nginx) {
+		this.id = id;
+		this.https = https;
+		this.queueSize = queueSize;
+		this.sslCertificate = sslCertificate;
+		this.resourceIdentifier = resourceIdentifier;
+		this.nginx = nginx;
+	}
+
+	@Deprecated
 	public VirtualHost(Long id, Integer https, SslCertificate sslCertificate, ResourceIdentifier resourceIdentifier,
-			Nginx nginx) {
+					   Nginx nginx) {
 		this.id = id;
 		this.nginx = nginx;
 		this.https = https == null ? 0 : https;
@@ -86,6 +88,14 @@ public class VirtualHost implements Serializable {
 
 	public void setHttps(Integer https) {
 		this.https = https;
+	}
+
+	public Long getQueueSize() {
+		return queueSize;
+	}
+
+	public void setQueueSize(Long queueSize) {
+		this.queueSize = queueSize;
 	}
 
 	public SslCertificate getSslCertificate() {

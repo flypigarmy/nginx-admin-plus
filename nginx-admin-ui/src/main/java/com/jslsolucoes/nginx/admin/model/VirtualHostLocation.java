@@ -1,17 +1,7 @@
 package com.jslsolucoes.nginx.admin.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
@@ -25,6 +15,12 @@ public class VirtualHostLocation implements Serializable {
 
 	@Column(name = "path")
 	private String path;
+
+	@Column(name = "queue_priority")
+	private Integer queuePriority;
+
+	@Column(name = "queue_handler")
+	private String queueHandler;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_upstream")
@@ -57,6 +53,22 @@ public class VirtualHostLocation implements Serializable {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+
+	public Integer getQueuePriority() {
+		return queuePriority;
+	}
+
+	public void setQueuePriority(Integer queuePriority) {
+		this.queuePriority = queuePriority;
+	}
+
+	public String getQueueHandler() {
+		return queueHandler;
+	}
+
+	public void setQueueHandler(String queueHandler) {
+		this.queueHandler = queueHandler;
 	}
 
 	public Upstream getUpstream() {
