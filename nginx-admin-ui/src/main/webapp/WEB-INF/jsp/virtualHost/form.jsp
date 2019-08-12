@@ -36,12 +36,6 @@
 				</html:listGroup>
 			</html:formGroup>
 
-            <html:formGroup label="{virtualHost.queueSize}" required="true">
-                <html:input value="${ virtualHost.queueSize }" name="queueSize"
-                    type="number" maxLength="9999"
-                    placeholder="{virtualHost.queueSize.placeholder}" required="true"></html:input>
-            </html:formGroup>
-
 			<html:formGroup label="{ssl.common.name}" required="true"
 				visible="${ virtualHost.https == 1  }">
 				<html:select cssClass="ssl" required="true" name="idSslCertificate"
@@ -51,6 +45,11 @@
 				</html:select>
 			</html:formGroup>
 
+            <html:formGroup label="{virtualHost.queueSize}" required="true">
+                <html:input value="${ virtualHost.queueSize }" name="queueSize"
+                    type="number" maxLength="9999"
+                    placeholder="{virtualHost.queueSize.placeholder}" required="true"></html:input>
+            </html:formGroup>
 
 			<html:formGroup>
 				<html:detailTable atLeast="1" data="${ virtualHost.aliases  }"
