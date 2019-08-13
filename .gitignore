@@ -9,4 +9,9 @@ target
 *.jar
 *.zip
 *.iml
-.idea/
+.idea/*.xml
+.idea/libraries/
+.idea/codeStyles/
+.idea/inspectionProfiles/
+opt/
+
