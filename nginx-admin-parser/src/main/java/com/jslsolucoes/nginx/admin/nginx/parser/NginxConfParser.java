@@ -66,9 +66,14 @@ public class NginxConfParser {
 		return Arrays.asList(new UpstreamParser(fileContent), new ServerParser(fileContent));
 	}
 
+	/**
+	 * remove comment lines and DOS2UNIX
+	 */
 	private String content(File file) {
 		try {
-			return FileUtils.readFileToString(file, "UTF-8").replaceAll("\\#(.*)", "");
+			return FileUtils.readFileToString(file, "UTF-8")
+					.replaceAll("\\#(.*)", "")
+					.replaceAll("\r\n", "\n");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
