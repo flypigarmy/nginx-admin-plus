@@ -77,11 +77,12 @@ public class ImportRepositoryImpl implements ImportRepository {
 			VirtualHostDirective virtualHostDirective = (VirtualHostDirective) directive;
 
 			List<VirtualHostAlias> aliases = virtualHostDirective.getAliases().stream()
-					.map(alias -> new VirtualHostAlias(alias)).collect(Collectors.toList());
+					.map(VirtualHostAlias::new).collect(Collectors.toList());
 
 			List<VirtualHostLocation> locations = virtualHostDirective.getLocations().stream()
 					.filter(location -> !StringUtils.isEmpty(location.getUpstream()))
 					.map(location -> new VirtualHostLocation(location.getPath(),
+							location.getQueuePriority(), location.getQueueHandler(),
 							upstreamRepository.searchFor(location.getUpstream(), nginx)))
 					.collect(Collectors.toList());
 

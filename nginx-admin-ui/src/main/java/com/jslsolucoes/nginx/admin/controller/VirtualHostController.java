@@ -80,6 +80,7 @@ public class VirtualHostController {
 	public void validate(Long id, Integer https, Long queueSize, String idResourceIdentifier, Long idSslCertificate,
 						 List<String> aliases, List<String> locations, List<Integer> queuePriorities,
 						 List<String> queueHandlers, List<Long> upstreams, Long idNginx) {
+		List<Location> locationList = locations(locations, queuePriorities, queueHandlers, upstreams);
 		this.result.use(Results.json())
 				.from(FormValidation.newBuilder()
 						.toUnordenedList(virtualHostRepository.validateBeforeSaveOrUpdate(new VirtualHost(id,
@@ -87,7 +88,7 @@ public class VirtualHostController {
 								queueSize,
 								new SslCertificate(idSslCertificate),
 								new ResourceIdentifier(idResourceIdentifier),
-								new Nginx(idNginx)), convert(aliases), convert(locations, upstreams))), "errors")
+								new Nginx(idNginx)), convert(aliases), convert(locationList, upstreams))), "errors")
 				.serialize();
 	}
 
@@ -133,28 +134,31 @@ public class VirtualHostController {
 							 List<String> queueHandlers, List<Long> upstreams, Long idNginx) {
 
 		SslCertificate sslCertificate = null;
-		if ((https != null && https == 1)) {
+		if (https == null) {
+			https = 0;
+		}
+		if (https == 1) {
 			sslCertificate = sslCertificateRepository.load(new SslCertificate(idSslCertificate));
 		}
-
+		List<Location> locationList = locations(locations, queuePriorities, queueHandlers, upstreams);
 		if (id == null) {
 			ResourceIdentifier resourceIdentifier = resourceIdentifierRepository.create();
 			NginxResponse nginxResponse = nginxAgentRunner.createVirtualHost(idNginx,
 					resourceIdentifier.getUuid(),
 					aliases,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificate().getUuid() : null,
-					(https != null && https == 1),
+					https == 1,
 					queueSize,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificatePrivateKey()
 							.getUuid() : null,
-					locations(locations, queuePriorities, queueHandlers, upstreams));
+					locationList);
 			if (nginxResponse.success()) {
 				OperationResult operationResult = virtualHostRepository.saveOrUpdate(new VirtualHost(id,
 						https,
 						queueSize,
 						sslCertificate,
 						resourceIdentifier,
-						new Nginx(idNginx)), convert(aliases), convert(locations, upstreams));
+						new Nginx(idNginx)), convert(aliases), convert(locationList, upstreams));
 				this.result.include("operation", operationResult.getOperationType());
 				this.result.redirectTo(this).edit(idNginx, operationResult.getId());
 			} else {
@@ -167,18 +171,18 @@ public class VirtualHostController {
 					virtualHost.getResourceIdentifier().getUuid(),
 					aliases,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificate().getUuid() : null,
-					(https != null && https == 1),
+					https == 1,
 					queueSize,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificatePrivateKey()
 							.getUuid() : null,
-					locations(locations, queuePriorities, queueHandlers, upstreams));
+					locationList);
 			if (nginxResponse.success()) {
 				OperationResult operationResult = virtualHostRepository.saveOrUpdate(new VirtualHost(id,
 						https,
 						queueSize,
 						sslCertificate,
 						virtualHost.getResourceIdentifier(),
-						new Nginx(idNginx)), convert(aliases), convert(locations, upstreams));
+						new Nginx(idNginx)), convert(aliases), convert(locationList, upstreams));
 				this.result.include("operation", operationResult.getOperationType());
 				this.result.redirectTo(this).edit(idNginx, operationResult.getId());
 			} else {
@@ -213,14 +217,16 @@ public class VirtualHostController {
 		return upstreamRepository.load(upstream).getName();
 	}
 
-	private List<VirtualHostLocation> convert(List<String> locations, List<Long> upstreams) {
+	private List<VirtualHostLocation> convert(List<Location> locations, List<Long> upstreams) {
 		AtomicInteger atomicInteger = new AtomicInteger(0);
 		return Lists.transform(locations,
-				location -> new VirtualHostLocation(location,
+				location -> new VirtualHostLocation(location.getPath(),
+						location.getQueuePriority(),
+						location.getQueueHandler(),
 						new Upstream(upstreams.get(atomicInteger.getAndIncrement()))));
 	}
 
 	private List<VirtualHostAlias> convert(List<String> aliases) {
-		return Lists.transform(aliases, alias -> new VirtualHostAlias(alias));
+		return Lists.transform(aliases, VirtualHostAlias::new);
 	}
 }

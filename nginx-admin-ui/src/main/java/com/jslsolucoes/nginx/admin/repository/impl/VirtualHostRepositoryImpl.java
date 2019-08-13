@@ -1,38 +1,26 @@
 package com.jslsolucoes.nginx.admin.repository.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.SetJoin;
-
 import com.jslsolucoes.i18n.Messages;
-import com.jslsolucoes.nginx.admin.model.Nginx;
-import com.jslsolucoes.nginx.admin.model.Nginx_;
-import com.jslsolucoes.nginx.admin.model.VirtualHost;
-import com.jslsolucoes.nginx.admin.model.VirtualHostAlias;
-import com.jslsolucoes.nginx.admin.model.VirtualHostAlias_;
-import com.jslsolucoes.nginx.admin.model.VirtualHostLocation;
-import com.jslsolucoes.nginx.admin.model.VirtualHost_;
+import com.jslsolucoes.nginx.admin.model.*;
 import com.jslsolucoes.nginx.admin.repository.ResourceIdentifierRepository;
 import com.jslsolucoes.nginx.admin.repository.VirtualHostAliasRepository;
 import com.jslsolucoes.nginx.admin.repository.VirtualHostLocationRepository;
 import com.jslsolucoes.nginx.admin.repository.VirtualHostRepository;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequestScoped
 public class VirtualHostRepositoryImpl extends RepositoryImpl<VirtualHost> implements VirtualHostRepository {
 
-	private ResourceIdentifierRepository resourceIdentifierRepository;
-	private VirtualHostAliasRepository virtualHostAliasRepository;
+	private ResourceIdentifierRepository  resourceIdentifierRepository;
+	private VirtualHostAliasRepository    virtualHostAliasRepository;
 	private VirtualHostLocationRepository virtualHostLocationRepository;
 
 	@Deprecated
@@ -42,9 +30,9 @@ public class VirtualHostRepositoryImpl extends RepositoryImpl<VirtualHost> imple
 
 	@Inject
 	public VirtualHostRepositoryImpl(EntityManager entityManager,
-			ResourceIdentifierRepository resourceIdentifierRepository,
-			VirtualHostAliasRepository virtualHostAliasRepository,
-			VirtualHostLocationRepository virtualHostLocationRepository) {
+									 ResourceIdentifierRepository resourceIdentifierRepository,
+									 VirtualHostAliasRepository virtualHostAliasRepository,
+									 VirtualHostLocationRepository virtualHostLocationRepository) {
 		super(entityManager);
 		this.resourceIdentifierRepository = resourceIdentifierRepository;
 		this.virtualHostAliasRepository = virtualHostAliasRepository;
@@ -53,7 +41,7 @@ public class VirtualHostRepositoryImpl extends RepositoryImpl<VirtualHost> imple
 
 	@Override
 	public OperationResult saveOrUpdate(VirtualHost virtualHost, List<VirtualHostAlias> aliases,
-			List<VirtualHostLocation> locations) {
+										List<VirtualHostLocation> locations) {
 		if (virtualHost.getHttps() == 0) {
 			virtualHost.setSslCertificate(null);
 		}
@@ -76,7 +64,7 @@ public class VirtualHostRepositoryImpl extends RepositoryImpl<VirtualHost> imple
 
 	@Override
 	public List<String> validateBeforeSaveOrUpdate(VirtualHost virtualHost, List<VirtualHostAlias> aliases,
-			List<VirtualHostLocation> locations) {
+												   List<VirtualHostLocation> locations) {
 		List<String> errors = new ArrayList<>();
 
 		if (hasEquals(virtualHost, aliases) != null) {

@@ -39,6 +39,14 @@ public class VirtualHostLocation implements Serializable {
 		this.upstream = upstream;
 	}
 
+	public VirtualHostLocation(String path, Integer queuePriority, String queueHandler,
+							   Upstream upstream) {
+		this.path = path;
+		this.queuePriority = queuePriority;
+		this.queueHandler = queueHandler;
+		this.upstream = upstream;
+	}
+
 	public Long getId() {
 		return id;
 	}
