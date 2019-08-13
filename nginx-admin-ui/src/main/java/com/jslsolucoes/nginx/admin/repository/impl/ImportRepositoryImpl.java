@@ -61,6 +61,7 @@ public class ImportRepositoryImpl implements ImportRepository {
 			servers(directives, nginx);
 			upstreams(directives, nginx);
 			virtualHosts(directives, nginx);
+			logger.info("importFrom, directivesCount={}", directives.size());
 		} else if (nginxResponse.error()) {
 			NginxExceptionResponse nginxExceptionResponse = (NginxExceptionResponse) nginxResponse;
 			logger.error(nginxExceptionResponse.getStackTrace());
