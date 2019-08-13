@@ -16,6 +16,12 @@
 			<html:gridColumn label="{nginx.agent.endpoint}" exportable="true" state="${ nginx.configuration == null ? 'danger' : 'default' }">
 				${ nginx.endpoint }
 			</html:gridColumn>
+			<html:gridColumn label="{nginx.agent.serviceName}" exportable="true" state="${ nginx.configuration == null ? 'danger' : 'default' }">
+				${ nginx.endpoint }
+			</html:gridColumn>
+			<html:gridColumn label="{nginx.agent.settingsPath}" exportable="true" state="${ nginx.configuration == null ? 'danger' : 'default' }">
+                ${ nginx.settingsPath }
+            </html:gridColumn>
 			<html:gridColumn label="{nginx.agent.authorization.key}" exportable="true" state="${ nginx.configuration == null ? 'danger' : 'default' }">
 				${ nginx.authorizationKey }
 			</html:gridColumn>
@@ -34,6 +40,7 @@
 						<fmt:message key="nginx.agent.delete.confirm">
 							<fmt:param value="${ nginx.name }"></fmt:param>
 							<fmt:param value="${ nginx.endpoint }"></fmt:param>
+							<fmt:param value="${ nginx.serviceName }"></fmt:param>
 						</fmt:message>
 					</html:confirm>
 				</html:buttonGroup>

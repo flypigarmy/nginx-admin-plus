@@ -1,18 +1,8 @@
 package com.jslsolucoes.nginx.admin.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
@@ -30,12 +20,18 @@ public class Nginx implements Serializable {
 	@Column(name = "endpoint")
 	private String endpoint;
 
+	@Column(name = "service_name")
+	private String serviceName;
+
+	@Column(name = "settings_path")
+	private String settingsPath;
+
 	@Column(name = "authorization_key")
 	private String authorizationKey;
 
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "nginx")
 	private Configuration configuration;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "nginx")
 	private Set<Server> servers;
 
@@ -43,10 +39,13 @@ public class Nginx implements Serializable {
 
 	}
 
-	public Nginx(Long id, String name, String endpoint, String authorizationKey) {
+	public Nginx(Long id, String name, String endpoint, String serviceName, String settingsPath,
+				 String authorizationKey) {
 		this.id = id;
 		this.name = name;
 		this.endpoint = endpoint;
+		this.serviceName = serviceName;
+		this.settingsPath = settingsPath;
 		this.authorizationKey = authorizationKey;
 	}
 
@@ -72,6 +71,22 @@ public class Nginx implements Serializable {
 
 	public String getEndpoint() {
 		return endpoint;
+	}
+
+	public String getSettingsPath() {
+		return settingsPath;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	public void setSettingsPath(String settingsPath) {
+		this.settingsPath = settingsPath;
 	}
 
 	public void setEndpoint(String endpoint) {

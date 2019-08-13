@@ -56,6 +56,7 @@
 							<fmt:message key="nginx.operations">
 								<fmt:param value="${ nginx.name }"></fmt:param>
 								<fmt:param value="${ nginx.endpoint }"></fmt:param>
+								<fmt:param value="${ nginx.serviceName }"></fmt:param>
 							</fmt:message>
 						</html:panelHead>
 						<html:panelBody>

@@ -15,7 +15,7 @@
 				<html:menuItem url="/user/logout" icon="log-out" label="{logout}"></html:menuItem>
 			</html:menuButton>
 			<html:menuButton icon="briefcase" align="right" rendered="${ nginx != null }">
-				<html:menuItem url="#" label="${ nginx.name } (${ nginx.endpoint })" icon="stop"></html:menuItem>
+				<html:menuItem url="#" label="${ nginx.name } (${ nginx.endpoint } ${ nginx.serviceName })" icon="stop"></html:menuItem>
 				<html:menuSeparator></html:menuSeparator>
 				<!-- <html:menuItem target="content" url="/import/form/${ nginx.id }" icon="copy" label="{import.nginx.conf}"></html:menuItem> -->
 				<html:menuItem target="content" url="/report/search/${ nginx.id }" icon="object-align-bottom" label="{reports}" ></html:menuItem>
@@ -33,6 +33,7 @@
 						<fmt:message key="nginx.agent.apply.session">
 							<fmt:param value="${ nginx.name }"></fmt:param>
 							<fmt:param value="${ nginx.endpoint }"></fmt:param>
+							<fmt:param value="${ nginx.serviceName }"></fmt:param>
 						</fmt:message>
 					</html:menuItem>
 				</c:forEach>
@@ -44,7 +45,7 @@
 		<html:alert state="info" rendered="${ nginx != null }">
 			<fmt:message key="nginx.agent.session">
 				<fmt:param>
-					${ nginx.name } (${ nginx.endpoint }) <html:button target="content" state="success" label="{go.to.dashboard}" url="/dashboard/index/${ nginx.id }"></html:button>
+					${ nginx.name } (${ nginx.endpoint } serviceName: ${ nginx.serviceName }) <html:button target="content" state="success" label="{go.to.dashboard}" url="/dashboard/index/${ nginx.id }"></html:button>
 				</fmt:param>
 			</fmt:message>
 		</html:alert>
