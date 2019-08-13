@@ -8,6 +8,7 @@ public class NginxVirtualHostCreateRequest {
 
 	private String         uuid;
 	private Boolean        https;
+	private Integer        listenPort;
 	private Long           queueSize;
 	private String         certificateUuid;
 	private String         certificatePrivateKeyUuid;
@@ -18,10 +19,13 @@ public class NginxVirtualHostCreateRequest {
 
 	}
 
-	public NginxVirtualHostCreateRequest(String uuid, Boolean https, Long queueSize, String certificateUuid,
-										 String certificatePrivateKeyUuid, List<String> aliases, List<Location> locations) {
+	public NginxVirtualHostCreateRequest(String uuid, Boolean https, Integer listenPort, Long queueSize,
+										 String certificateUuid,
+										 String certificatePrivateKeyUuid, List<String> aliases,
+										 List<Location> locations) {
 		this.uuid = uuid;
 		this.https = https;
+		this.listenPort = listenPort;
 		this.queueSize = queueSize;
 		this.certificateUuid = certificateUuid;
 		this.certificatePrivateKeyUuid = certificatePrivateKeyUuid;
@@ -39,6 +43,14 @@ public class NginxVirtualHostCreateRequest {
 
 	public Boolean getHttps() {
 		return https;
+	}
+
+	public Integer getListenPort() {
+		return listenPort;
+	}
+
+	public void setListenPort(Integer listenPort) {
+		this.listenPort = listenPort;
 	}
 
 	public Long getQueueSize() {

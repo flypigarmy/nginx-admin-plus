@@ -146,22 +146,42 @@ public class NginxAgentRunner {
 	}
 
 	public NginxResponse createVirtualHost(Long idNginx, String uuid, List<String> aliases, String certificateUuid,
-										   Boolean https, Long queueSize, String certificatePrivateKeyUuid,
+										   Boolean https, Integer listenPort, Long queueSize,
+										   String certificatePrivateKeyUuid,
 										   List<Location> locations) {
-		return nginxAgentClient.api(NginxAgentClientApis.virtualHost()).withUuid(uuid)
-				.withAuthorizationKey(authorizationKey(idNginx)).withEndpoint(endpoint(idNginx)).withAliases(aliases)
-				.withHttps(https).withQueueSize(queueSize).withCertificateUuid(certificateUuid)
-				.withCertificatePrivateKeyUuid(certificatePrivateKeyUuid).withLocations(locations).build().create()
+		return nginxAgentClient.api(NginxAgentClientApis.virtualHost())
+				.withUuid(uuid)
+				.withAuthorizationKey(authorizationKey(idNginx))
+				.withEndpoint(endpoint(idNginx))
+				.withAliases(aliases)
+				.withHttps(https)
+				.withListenPort(listenPort)
+				.withQueueSize(queueSize)
+				.withCertificateUuid(certificateUuid)
+				.withCertificatePrivateKeyUuid(certificatePrivateKeyUuid)
+				.withLocations(locations)
+				.build()
+				.create()
 				.join();
 	}
 
 	public NginxResponse updateVirtualHost(Long idNginx, String uuid, List<String> aliases, String certificateUuid,
-										   Boolean https, Long queueSize, String certificatePrivateKeyUuid,
+										   Boolean https, Integer listenPort, Long queueSize,
+										   String certificatePrivateKeyUuid,
 										   List<Location> locations) {
-		return nginxAgentClient.api(NginxAgentClientApis.virtualHost()).withUuid(uuid)
-				.withAuthorizationKey(authorizationKey(idNginx)).withEndpoint(endpoint(idNginx)).withAliases(aliases)
-				.withHttps(https).withQueueSize(queueSize).withCertificateUuid(certificateUuid)
-				.withCertificatePrivateKeyUuid(certificatePrivateKeyUuid).withLocations(locations).build().create()
+		return nginxAgentClient.api(NginxAgentClientApis.virtualHost())
+				.withUuid(uuid)
+				.withAuthorizationKey(authorizationKey(idNginx))
+				.withEndpoint(endpoint(idNginx))
+				.withAliases(aliases)
+				.withHttps(https)
+				.withListenPort(listenPort)
+				.withQueueSize(queueSize)
+				.withCertificateUuid(certificateUuid)
+				.withCertificatePrivateKeyUuid(certificatePrivateKeyUuid)
+				.withLocations(locations)
+				.build()
+				.create()
 				.join();
 	}
 

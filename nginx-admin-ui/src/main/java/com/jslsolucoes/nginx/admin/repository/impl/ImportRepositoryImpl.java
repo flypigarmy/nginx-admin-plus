@@ -96,7 +96,8 @@ public class ImportRepositoryImpl implements ImportRepository {
 					sslCertificate = new SslCertificate(operationResult.getId());
 				}
 				virtualHostRepository.saveOrUpdate(
-						new VirtualHost(virtualHostDirective.getPort() == 80 ? 0 : 1,
+						new VirtualHost(virtualHostDirective.isSsl() ? 1 : 0,
+								virtualHostDirective.getPort(),
 								virtualHostDirective.getQueueSize()
 								== null ? DEFAULT_QUEUE_SIZE : virtualHostDirective.getQueueSize(),
 								sslCertificate), aliases,

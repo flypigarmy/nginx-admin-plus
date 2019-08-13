@@ -7,6 +7,7 @@ import java.util.List;
 public class NginxVirtualHostUpdateRequest {
 
 	private Boolean        https;
+	private Integer        listenPort;
 	private Long           queueSize;
 	private String         certificateUuid;
 	private String         certificatePrivateKeyUuid;
@@ -17,11 +18,12 @@ public class NginxVirtualHostUpdateRequest {
 
 	}
 
-	public NginxVirtualHostUpdateRequest(Boolean https, Long queueSize, String certificateUuid,
+	public NginxVirtualHostUpdateRequest(Boolean https, Integer listenPort, Long queueSize, String certificateUuid,
 										 String certificatePrivateKeyUuid,
 										 List<String> aliases, List<Location> locations) {
 		this.https = https;
 		this.queueSize = queueSize;
+		this.listenPort = listenPort;
 		this.certificateUuid = certificateUuid;
 		this.certificatePrivateKeyUuid = certificatePrivateKeyUuid;
 		this.aliases = aliases;
@@ -34,6 +36,14 @@ public class NginxVirtualHostUpdateRequest {
 
 	public void setHttps(Boolean https) {
 		this.https = https;
+	}
+
+	public Integer getListenPort() {
+		return listenPort;
+	}
+
+	public void setListenPort(Integer listenPort) {
+		this.listenPort = listenPort;
 	}
 
 	public Long getQueueSize() {

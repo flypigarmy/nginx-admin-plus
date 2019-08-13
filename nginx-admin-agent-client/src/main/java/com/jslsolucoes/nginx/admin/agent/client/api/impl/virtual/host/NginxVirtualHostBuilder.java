@@ -13,6 +13,7 @@ public class NginxVirtualHostBuilder implements NginxAgentClientApiBuilder {
 	private String                   authorizationKey;
 	private String                   uuid;
 	private Boolean                  https;
+	private Integer                  listenPort;
 	private Long                     queueSize;
 	private String                   certificateUuid;
 	private String                   certificatePrivateKeyUuid;
@@ -30,6 +31,7 @@ public class NginxVirtualHostBuilder implements NginxAgentClientApiBuilder {
 				authorizationKey,
 				uuid,
 				https,
+				listenPort,
 				queueSize,
 				certificateUuid,
 				certificatePrivateKeyUuid,
@@ -48,6 +50,11 @@ public class NginxVirtualHostBuilder implements NginxAgentClientApiBuilder {
 
 	public NginxVirtualHostBuilder withHttps(Boolean https) {
 		this.https = https;
+		return this;
+	}
+
+	public NginxVirtualHostBuilder withListenPort(Integer listenPort) {
+		this.listenPort = listenPort;
 		return this;
 	}
 

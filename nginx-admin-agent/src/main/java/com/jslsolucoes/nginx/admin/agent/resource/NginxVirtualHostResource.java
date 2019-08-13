@@ -42,6 +42,7 @@ public class NginxVirtualHostResource {
 		NginxOperationResult nginxOperationResult = nginxVirtualHostResourceImpl.create(
 				nginxVirtualHostCreateRequest.getUuid(),
 				nginxVirtualHostCreateRequest.getHttps(),
+				nginxVirtualHostCreateRequest.getListenPort(),
 				nginxVirtualHostCreateRequest.getQueueSize(),
 				nginxVirtualHostCreateRequest.getCertificateUuid(),
 				nginxVirtualHostCreateRequest.getCertificatePrivateKeyUuid(),
@@ -60,6 +61,7 @@ public class NginxVirtualHostResource {
 					   @Suspended AsyncResponse asyncResponse) {
 		NginxOperationResult nginxOperationResult = nginxVirtualHostResourceImpl.update(uuid,
 				nginxVirtualHostUpdateRequest.getHttps(),
+				nginxVirtualHostUpdateRequest.getListenPort(),
 				nginxVirtualHostUpdateRequest.getQueueSize(),
 				nginxVirtualHostUpdateRequest.getCertificateUuid(),
 				nginxVirtualHostUpdateRequest.getCertificatePrivateKeyUuid(),
