@@ -35,6 +35,7 @@ public class ServerParser implements Parser {
 			Matcher listen = Pattern.compile("listen(\\s{1,})([0-9]{2,})(\\s(.*?))?;").matcher(block);
 			if (listen.find()) {
 				virtualHost.setPort(Integer.valueOf(listen.group(2)));
+				virtualHost.setSsl(listen.group().contains("ssl"));
 			}
 
 			Matcher serverName = Pattern.compile("server_name(\\s{1,})(.*?);").matcher(block);

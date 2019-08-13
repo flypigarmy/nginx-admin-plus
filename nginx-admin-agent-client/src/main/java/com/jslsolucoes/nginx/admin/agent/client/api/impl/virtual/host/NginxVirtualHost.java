@@ -31,6 +31,7 @@ public class NginxVirtualHost extends DefaultNginxAgentClientApi implements Ngin
 	private final String                   authorizationKey;
 	private final String                   uuid;
 	private final Boolean                  https;
+	private final Integer                  listenPort;
 	private final Long                     queueSize;
 	private final String                   certificateUuid;
 	private final String                   certificatePrivateKeyUuid;
@@ -38,7 +39,7 @@ public class NginxVirtualHost extends DefaultNginxAgentClientApi implements Ngin
 	private final List<Location>           locations;
 
 	public NginxVirtualHost(ScheduledExecutorService scheduledExecutorService, String endpoint, String authorizationKey,
-							String uuid, Boolean https, Long queueSize, String certificateUuid,
+							String uuid, Boolean https, Integer listenPort, Long queueSize, String certificateUuid,
 							String certificatePrivateKeyUuid, List<String> aliases,
 							List<Location> locations) {
 		this.scheduledExecutorService = scheduledExecutorService;
@@ -46,6 +47,7 @@ public class NginxVirtualHost extends DefaultNginxAgentClientApi implements Ngin
 		this.authorizationKey = authorizationKey;
 		this.uuid = uuid;
 		this.https = https;
+		this.listenPort = listenPort;
 		this.queueSize = queueSize;
 		this.certificateUuid = certificateUuid;
 		this.certificatePrivateKeyUuid = certificatePrivateKeyUuid;
@@ -57,7 +59,12 @@ public class NginxVirtualHost extends DefaultNginxAgentClientApi implements Ngin
 		return CompletableFuture.supplyAsync(() -> {
 			try (RestClient restClient = RestClient.build()) {
 				NginxVirtualHostUpdateRequest nginxVirtualHostUpdateRequest = new NginxVirtualHostUpdateRequest(https,
-						queueSize, certificateUuid, certificatePrivateKeyUuid, aliases, locations);
+						listenPort,
+						queueSize,
+						certificateUuid,
+						certificatePrivateKeyUuid,
+						aliases,
+						locations);
 				Entity<NginxVirtualHostUpdateRequest> entity = Entity.entity(nginxVirtualHostUpdateRequest,
 						MediaType.APPLICATION_JSON);
 				WebTarget webTarget = restClient.target(endpoint);
@@ -74,7 +81,7 @@ public class NginxVirtualHost extends DefaultNginxAgentClientApi implements Ngin
 		return CompletableFuture.supplyAsync(() -> {
 			try (RestClient restClient = RestClient.build()) {
 				NginxVirtualHostCreateRequest nginxVirtualHostCreateRequest = new NginxVirtualHostCreateRequest(uuid,
-						https, queueSize, certificateUuid, certificatePrivateKeyUuid, aliases, locations);
+						https, listenPort, queueSize, certificateUuid, certificatePrivateKeyUuid, aliases, locations);
 				Entity<NginxVirtualHostCreateRequest> entity = Entity.entity(nginxVirtualHostCreateRequest,
 						MediaType.APPLICATION_JSON);
 				WebTarget webTarget = restClient.target(endpoint);

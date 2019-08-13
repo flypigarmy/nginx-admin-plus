@@ -20,6 +20,9 @@ public class VirtualHost implements Serializable {
 	@Column(name = "https")
 	private Integer https;
 
+	@Column(name = "listen_port")
+	private Integer listenPort;
+
 	@Column(name = "queue_size")
 	private Long queueSize;
 
@@ -49,18 +52,20 @@ public class VirtualHost implements Serializable {
 		this.id = id;
 	}
 
-	public VirtualHost(Long id, Integer https, Long queueSize, SslCertificate sslCertificate,
+	public VirtualHost(Long id, Integer https, Integer listenPort, Long queueSize, SslCertificate sslCertificate,
 					   ResourceIdentifier resourceIdentifier, Nginx nginx) {
 		this.id = id;
 		this.https = https;
+		this.listenPort = listenPort;
 		this.queueSize = queueSize;
 		this.sslCertificate = sslCertificate;
 		this.resourceIdentifier = resourceIdentifier;
 		this.nginx = nginx;
 	}
 
-	public VirtualHost(Integer https, Long queueSize, SslCertificate sslCertificate) {
+	public VirtualHost(Integer https, Integer listenPort, Long queueSize, SslCertificate sslCertificate) {
 		this.https = https;
+		this.listenPort = listenPort;
 		this.queueSize = queueSize;
 		this.sslCertificate = sslCertificate;
 	}
@@ -79,6 +84,14 @@ public class VirtualHost implements Serializable {
 
 	public void setHttps(Integer https) {
 		this.https = https;
+	}
+
+	public Integer getListenPort() {
+		return listenPort;
+	}
+
+	public void setListenPort(Integer listenPort) {
+		this.listenPort = listenPort;
 	}
 
 	public Long getQueueSize() {

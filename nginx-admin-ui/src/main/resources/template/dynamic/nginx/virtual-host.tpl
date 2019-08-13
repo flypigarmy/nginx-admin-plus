@@ -1,20 +1,7 @@
-<#if virtualHost.https == 1>
-server {
-
-       listen               80;
-       
-       server_name <#list virtualHost.aliases as virtualHostAlias> ${ virtualHostAlias.alias } </#list>;
-
-       location / {
-            return 301 https://$server_name$request_uri;
-       }
-       
-}
-</#if>
 
 server {
 	<#if virtualHost.https == 1>
-		listen               443 ssl;
+		listen               ${ listenPort } ssl;
 		ssl_certificate      /opt/nginx-admin/settings/ssl/${ virtualHost.sslCertificate.resourceIdentifierCertificate.hash };
 		ssl_certificate_key  /opt/nginx-admin/settings/ssl/${ virtualHost.sslCertificate.resourceIdentifierCertificatePrivateKey.hash };
 		ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -23,7 +10,7 @@ server {
         ssl_session_cache shared:SSL:10m;
         ssl_dhparam  /opt/nginx-admin/settings/ssl/dhparam.pem;
 	<#else>
-	 	listen               80;
+	 	listen               ${ listenPort };
 	</#if>
           
        	server_name <#list aliases as alias> ${ alias } </#list>;

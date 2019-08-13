@@ -1,20 +1,7 @@
-<#if https >
-server {
-
-       listen               80;
-       
-       server_name <#list aliases as alias> ${ alias } </#list>;
-
-       location / {
-            return 301 https://$server_name$request_uri;
-       }
-       
-}
-</#if>
 
 server {
 	<#if https>
-		listen               443 ssl;
+		listen               ${ listenPort } ssl;
 		ssl_certificate      ${ settings }/ssl/${ certificateUuid }.ssl;
 		ssl_certificate_key  ${ settings }/ssl/${ certificatePrivateKeyUuid }.ssl;
 		ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -23,7 +10,7 @@ server {
         ssl_session_cache shared:SSL:10m;
         ssl_dhparam  ${ settings }/ssl/dhparam.pem;
 	<#else>
-	 	listen               80;
+	 	listen               ${ listenPort };
 	</#if>
           
        	server_name <#list aliases as alias> ${ alias } </#list>;

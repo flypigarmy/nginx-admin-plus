@@ -4,12 +4,21 @@ import java.util.List;
 
 public class VirtualHostDirective implements Directive {
 
+	private boolean                 ssl = false;
 	private Integer                 port;
 	private Long                    queueSize;
 	private List<String>            aliases;
 	private SslDirective            sslCertificate;
 	private SslDirective            sslCertificateKey;
 	private List<LocationDirective> locations;
+
+	public boolean isSsl() {
+		return ssl;
+	}
+
+	public void setSsl(boolean ssl) {
+		this.ssl = ssl;
+	}
 
 	public Integer getPort() {
 		return port;

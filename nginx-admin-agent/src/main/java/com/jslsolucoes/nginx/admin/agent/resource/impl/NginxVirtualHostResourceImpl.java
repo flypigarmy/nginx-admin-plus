@@ -28,25 +28,43 @@ public class NginxVirtualHostResourceImpl {
 		this.configuration = configuration;
 	}
 
-	public NginxOperationResult create(String uuid, Boolean https, Long queueSize, String certificateUuid,
+	public NginxOperationResult create(String uuid, Boolean https, Integer listenPort, Long queueSize,
+									   String certificateUuid,
 									   String certificatePrivateKeyUuid, List<String> aliases,
 									   List<Location> locations) {
-		return createOrUpdate(uuid, https, queueSize, certificateUuid, certificatePrivateKeyUuid, aliases, locations);
+		return createOrUpdate(uuid,
+				https,
+				listenPort,
+				queueSize,
+				certificateUuid,
+				certificatePrivateKeyUuid,
+				aliases,
+				locations);
 	}
 
-	public NginxOperationResult update(String uuid, Boolean https, Long queueSize, String certificateUuid,
+	public NginxOperationResult update(String uuid, Boolean https, Integer listenPort, Long queueSize,
+									   String certificateUuid,
 									   String certificatePrivateKeyUuid, List<String> aliases,
 									   List<Location> locations) {
-		return createOrUpdate(uuid, https, queueSize, certificateUuid, certificatePrivateKeyUuid, aliases, locations);
+		return createOrUpdate(uuid,
+				https,
+				listenPort,
+				queueSize,
+				certificateUuid,
+				certificatePrivateKeyUuid,
+				aliases,
+				locations);
 	}
 
-	private NginxOperationResult createOrUpdate(String uuid, Boolean https, Long queueSize, String certificateUuid,
+	private NginxOperationResult createOrUpdate(String uuid, Boolean https, Integer listenPort, Long queueSize,
+												String certificateUuid,
 												String certificatePrivateKeyUuid, List<String> aliases,
 												List<Location> locations) {
 		try (FileWriter fileWriter = new FileWriter(virtualHost(uuid))) {
 			TemplateBuilder.newBuilder()
 					.withClasspathTemplate("/template/nginx/dynamic", "virtual-host.tpl")
 					.withData("https", https)
+					.withData("listenPort", listenPort)
 					.withData("queueSize", queueSize)
 					.withData("certificateUuid", certificateUuid)
 					.withData("certificatePrivateKeyUuid", certificatePrivateKeyUuid)

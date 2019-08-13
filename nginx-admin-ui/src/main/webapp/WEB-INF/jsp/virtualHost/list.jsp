@@ -19,6 +19,9 @@
 			<html:gridColumn label="{virtualHost.https}" booleanType="true" exportable="true">
 				${ virtualHost.https }
 			</html:gridColumn>
+            <html:gridColumn label="{virtualHost.listenPort}" booleanType="false" exportable="true">
+                ${ virtualHost.listenPort }
+            </html:gridColumn>
             <html:gridColumn label="{virtualHost.queueSize}" booleanType="false" exportable="true">
                 ${ virtualHost.queueSize }
             </html:gridColumn>

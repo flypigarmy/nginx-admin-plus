@@ -45,9 +45,15 @@
 				</html:select>
 			</html:formGroup>
 
+            <html:formGroup label="{virtualHost.listenPort}" required="true">
+                <html:input value="${ virtualHost.listenPort }" name="listenPort"
+                    type="number" maxLength="5"
+                    placeholder="{virtualHost.listenPort.placeholder}" required="true"></html:input>
+            </html:formGroup>
+
             <html:formGroup label="{virtualHost.queueSize}" required="true">
                 <html:input value="${ virtualHost.queueSize }" name="queueSize"
-                    type="number" maxLength="9999"
+                    type="number" maxLength="10"
                     placeholder="{virtualHost.queueSize.placeholder}" required="true"></html:input>
             </html:formGroup>
 

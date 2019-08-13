@@ -77,7 +77,8 @@ public class VirtualHostController {
 		this.result.include("nginx", new Nginx(idNginx));
 	}
 
-	public void validate(Long id, Integer https, Long queueSize, String idResourceIdentifier, Long idSslCertificate,
+	public void validate(Long id, Integer https, Integer listenPort, Long queueSize, String idResourceIdentifier,
+						 Long idSslCertificate,
 						 List<String> aliases, List<String> locations, List<Integer> queuePriorities,
 						 List<String> queueHandlers, List<Long> upstreams, Long idNginx) {
 		List<Location> locationList = locations(locations, queuePriorities, queueHandlers, upstreams);
@@ -85,6 +86,7 @@ public class VirtualHostController {
 				.from(FormValidation.newBuilder()
 						.toUnordenedList(virtualHostRepository.validateBeforeSaveOrUpdate(new VirtualHost(id,
 								https,
+								listenPort,
 								queueSize,
 								new SslCertificate(idSslCertificate),
 								new ResourceIdentifier(idResourceIdentifier),
@@ -129,9 +131,10 @@ public class VirtualHostController {
 	}
 
 	@Post
-	public void saveOrUpdate(Long id, Integer https, Long queueSize, Long idResourceIdentifier, Long idSslCertificate,
-							 List<String> aliases, List<String> locations, List<Integer> queuePriorities,
-							 List<String> queueHandlers, List<Long> upstreams, Long idNginx) {
+	public void saveOrUpdate(Long id, Integer https, Integer listenPort, Long queueSize, Long idResourceIdentifier,
+							 Long idSslCertificate, List<String> aliases, List<String> locations,
+							 List<Integer> queuePriorities, List<String> queueHandlers, List<Long> upstreams,
+							 Long idNginx) {
 
 		SslCertificate sslCertificate = null;
 		if (https == null) {
@@ -148,6 +151,7 @@ public class VirtualHostController {
 					aliases,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificate().getUuid() : null,
 					https == 1,
+					listenPort,
 					queueSize,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificatePrivateKey()
 							.getUuid() : null,
@@ -155,6 +159,7 @@ public class VirtualHostController {
 			if (nginxResponse.success()) {
 				OperationResult operationResult = virtualHostRepository.saveOrUpdate(new VirtualHost(id,
 						https,
+						listenPort,
 						queueSize,
 						sslCertificate,
 						resourceIdentifier,
@@ -172,6 +177,7 @@ public class VirtualHostController {
 					aliases,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificate().getUuid() : null,
 					https == 1,
+					listenPort,
 					queueSize,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificatePrivateKey()
 							.getUuid() : null,
@@ -179,6 +185,7 @@ public class VirtualHostController {
 			if (nginxResponse.success()) {
 				OperationResult operationResult = virtualHostRepository.saveOrUpdate(new VirtualHost(id,
 						https,
+						listenPort,
 						queueSize,
 						sslCertificate,
 						virtualHost.getResourceIdentifier(),
