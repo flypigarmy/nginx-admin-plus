@@ -10,7 +10,7 @@ server {
         ssl_session_cache shared:SSL:10m;
         ssl_dhparam  ${ settings }/ssl/dhparam.pem;
 	<#else>
-	 	listen               ${ listenPort };
+	 	listen               ${ listenPort?c };
 	</#if>
           
        	server_name <#list aliases as alias> ${ alias } </#list>;
@@ -20,7 +20,7 @@ server {
     <#list locations as location>
     	
     	location ${ location.path } {
-            set $queue_priority ${ location.queuePriority };
+            set $queue_priority ${ location.queuePriority?c };
             set $queue_handler ${ location.queueHandler };
             content_by_lua_file ../lualib/ob/ob_que_handle.lua;
       		proxy_pass  http://${ location.upstream };

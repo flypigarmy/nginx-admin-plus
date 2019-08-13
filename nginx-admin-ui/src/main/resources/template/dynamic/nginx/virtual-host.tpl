@@ -1,7 +1,7 @@
 
 server {
 	<#if virtualHost.https == 1>
-		listen               ${ listenPort } ssl;
+		listen               ${ listenPort?c } ssl;
 		ssl_certificate      /opt/nginx-admin/settings/ssl/${ virtualHost.sslCertificate.resourceIdentifierCertificate.hash };
 		ssl_certificate_key  /opt/nginx-admin/settings/ssl/${ virtualHost.sslCertificate.resourceIdentifierCertificatePrivateKey.hash };
 		ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
@@ -10,17 +10,17 @@ server {
         ssl_session_cache shared:SSL:10m;
         ssl_dhparam  /opt/nginx-admin/settings/ssl/dhparam.pem;
 	<#else>
-	 	listen               ${ listenPort };
+	 	listen               ${ listenPort?c };
 	</#if>
           
        	server_name <#list aliases as alias> ${ alias } </#list>;
 
-        set_by_lua_file $queue_size ../lualib/ob/ob_queue_set.lua ${ queueSize };
+        set_by_lua_file $queue_size ../lualib/ob/ob_queue_set.lua ${ queueSize?c };
 
     <#list locations as location>
 
     	location ${ location.path } {
-            set $queue_priority ${ location.queuePriority };
+            set $queue_priority ${ location.queuePriority?c };
             set $queue_handler ${ location.queueHandler };
             content_by_lua_file ../lualib/ob/ob_que_handle.lua;
       		proxy_pass  http://${ location.upstream };
