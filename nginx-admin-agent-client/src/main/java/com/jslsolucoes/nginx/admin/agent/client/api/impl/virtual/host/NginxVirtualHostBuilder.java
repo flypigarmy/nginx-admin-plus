@@ -1,22 +1,23 @@
 package com.jslsolucoes.nginx.admin.agent.client.api.impl.virtual.host;
 
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-
 import com.jslsolucoes.nginx.admin.agent.client.api.NginxAgentClientApiBuilder;
 import com.jslsolucoes.nginx.admin.agent.model.Location;
+
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class NginxVirtualHostBuilder implements NginxAgentClientApiBuilder {
 
 	private ScheduledExecutorService scheduledExecutorService;
-	private String endpoint;
-	private String authorizationKey;
-	private String uuid;
-	private Boolean https;
-	private String certificateUuid;
-	private String certificatePrivateKeyUuid;
-	private List<String> aliases;
-	private List<Location> locations;
+	private String                   endpoint;
+	private String                   authorizationKey;
+	private String                   uuid;
+	private Boolean                  https;
+	private Long                     queueSize;
+	private String                   certificateUuid;
+	private String                   certificatePrivateKeyUuid;
+	private List<String>             aliases;
+	private List<Location>           locations;
 
 	private NginxVirtualHostBuilder() {
 
@@ -24,8 +25,16 @@ public class NginxVirtualHostBuilder implements NginxAgentClientApiBuilder {
 
 	@Override
 	public NginxVirtualHost build() {
-		return new NginxVirtualHost(scheduledExecutorService, endpoint, authorizationKey, uuid, https, certificateUuid,
-				certificatePrivateKeyUuid, aliases, locations);
+		return new NginxVirtualHost(scheduledExecutorService,
+				endpoint,
+				authorizationKey,
+				uuid,
+				https,
+				queueSize,
+				certificateUuid,
+				certificatePrivateKeyUuid,
+				aliases,
+				locations);
 	}
 
 	public static NginxVirtualHostBuilder newBuilder() {
@@ -39,6 +48,11 @@ public class NginxVirtualHostBuilder implements NginxAgentClientApiBuilder {
 
 	public NginxVirtualHostBuilder withHttps(Boolean https) {
 		this.https = https;
+		return this;
+	}
+
+	public NginxVirtualHostBuilder withQueueSize(Long queueSize) {
+		this.queueSize = queueSize;
 		return this;
 	}
 

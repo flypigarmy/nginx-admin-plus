@@ -1,21 +1,5 @@
 package com.jslsolucoes.nginx.admin.agent.resource;
 
-import javax.inject.Inject;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
-
 import com.jslsolucoes.nginx.admin.agent.auth.AuthHandler;
 import com.jslsolucoes.nginx.admin.agent.error.ErrorHandler;
 import com.jslsolucoes.nginx.admin.agent.model.FileObject;
@@ -27,6 +11,12 @@ import com.jslsolucoes.nginx.admin.agent.model.response.virtual.host.NginxVirtua
 import com.jslsolucoes.nginx.admin.agent.model.response.virtual.host.NginxVirtualHostUpdateResponse;
 import com.jslsolucoes.nginx.admin.agent.resource.impl.NginxOperationResult;
 import com.jslsolucoes.nginx.admin.agent.resource.impl.NginxVirtualHostResourceImpl;
+
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.*;
 
 @Path("virtualHost")
 @ErrorHandler
@@ -48,12 +38,15 @@ public class NginxVirtualHostResource {
 
 	@POST
 	public void create(NginxVirtualHostCreateRequest nginxVirtualHostCreateRequest,
-			@Suspended AsyncResponse asyncResponse, @Context UriInfo uriInfo) {
+					   @Suspended AsyncResponse asyncResponse, @Context UriInfo uriInfo) {
 		NginxOperationResult nginxOperationResult = nginxVirtualHostResourceImpl.create(
-				nginxVirtualHostCreateRequest.getUuid(), nginxVirtualHostCreateRequest.getHttps(),
+				nginxVirtualHostCreateRequest.getUuid(),
+				nginxVirtualHostCreateRequest.getHttps(),
+				nginxVirtualHostCreateRequest.getQueueSize(),
 				nginxVirtualHostCreateRequest.getCertificateUuid(),
 				nginxVirtualHostCreateRequest.getCertificatePrivateKeyUuid(),
-				nginxVirtualHostCreateRequest.getAliases(), nginxVirtualHostCreateRequest.getLocations());
+				nginxVirtualHostCreateRequest.getAliases(),
+				nginxVirtualHostCreateRequest.getLocations());
 		UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
 		uriBuilder.path(nginxVirtualHostCreateRequest.getUuid());
 		asyncResponse.resume(Response.created(uriBuilder.build()).entity(
@@ -64,11 +57,14 @@ public class NginxVirtualHostResource {
 	@PUT
 	@Path("{uuid}")
 	public void update(@PathParam("uuid") String uuid, NginxVirtualHostUpdateRequest nginxVirtualHostUpdateRequest,
-			@Suspended AsyncResponse asyncResponse) {
+					   @Suspended AsyncResponse asyncResponse) {
 		NginxOperationResult nginxOperationResult = nginxVirtualHostResourceImpl.update(uuid,
-				nginxVirtualHostUpdateRequest.getHttps(), nginxVirtualHostUpdateRequest.getCertificateUuid(),
+				nginxVirtualHostUpdateRequest.getHttps(),
+				nginxVirtualHostUpdateRequest.getQueueSize(),
+				nginxVirtualHostUpdateRequest.getCertificateUuid(),
 				nginxVirtualHostUpdateRequest.getCertificatePrivateKeyUuid(),
-				nginxVirtualHostUpdateRequest.getAliases(), nginxVirtualHostUpdateRequest.getLocations());
+				nginxVirtualHostUpdateRequest.getAliases(),
+				nginxVirtualHostUpdateRequest.getLocations());
 		asyncResponse.resume(Response.ok(
 				new NginxVirtualHostUpdateResponse(nginxOperationResult.getOutput(), nginxOperationResult.isSuccess()))
 				.build());

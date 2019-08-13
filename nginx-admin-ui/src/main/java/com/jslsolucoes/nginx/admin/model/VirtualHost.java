@@ -59,18 +59,9 @@ public class VirtualHost implements Serializable {
 		this.nginx = nginx;
 	}
 
-	@Deprecated
-	public VirtualHost(Long id, Integer https, SslCertificate sslCertificate, ResourceIdentifier resourceIdentifier,
-					   Nginx nginx) {
-		this.id = id;
-		this.nginx = nginx;
-		this.https = https == null ? 0 : https;
-		this.sslCertificate = sslCertificate;
-		this.resourceIdentifier = resourceIdentifier;
-	}
-
-	public VirtualHost(Integer https, SslCertificate sslCertificate) {
+	public VirtualHost(Integer https, Long queueSize, SslCertificate sslCertificate) {
 		this.https = https;
+		this.queueSize = queueSize;
 		this.sslCertificate = sslCertificate;
 	}
 

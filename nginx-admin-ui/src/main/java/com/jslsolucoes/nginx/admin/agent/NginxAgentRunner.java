@@ -1,10 +1,5 @@
 package com.jslsolucoes.nginx.admin.agent;
 
-import java.util.List;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-
 import com.jslsolucoes.nginx.admin.agent.client.NginxAgentClient;
 import com.jslsolucoes.nginx.admin.agent.client.api.NginxAgentClientApis;
 import com.jslsolucoes.nginx.admin.agent.client.api.impl.cli.NginxCommandLineInterface;
@@ -15,11 +10,15 @@ import com.jslsolucoes.nginx.admin.agent.model.response.NginxResponse;
 import com.jslsolucoes.nginx.admin.model.Nginx;
 import com.jslsolucoes.nginx.admin.repository.NginxRepository;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import java.util.List;
+
 @RequestScoped
 public class NginxAgentRunner {
 
 	private NginxAgentClient nginxAgentClient;
-	private NginxRepository nginxRepository;
+	private NginxRepository  nginxRepository;
 
 	@Deprecated
 	public NginxAgentRunner() {
@@ -37,14 +36,14 @@ public class NginxAgentRunner {
 	}
 
 	public NginxResponse createUpstream(Long idNginx, String uuid, String name, String strategy,
-			List<Endpoint> endpoints) {
+										List<Endpoint> endpoints) {
 		return nginxAgentClient.api(NginxAgentClientApis.upstream()).withUuid(uuid)
 				.withAuthorizationKey(authorizationKey(idNginx)).withEndpoint(endpoint(idNginx)).withName(name)
 				.withStrategy(strategy).withEndpoints(endpoints).build().create().join();
 	}
 
 	public NginxResponse updateUpstream(Long idNginx, String uuid, String name, String strategy,
-			List<Endpoint> endpoints) {
+										List<Endpoint> endpoints) {
 		return nginxAgentClient.api(NginxAgentClientApis.upstream()).withUuid(uuid)
 				.withAuthorizationKey(authorizationKey(idNginx)).withEndpoint(endpoint(idNginx)).withName(name)
 				.withStrategy(strategy).withEndpoints(endpoints).build().update().join();
@@ -60,8 +59,8 @@ public class NginxAgentRunner {
 		return nginxAgentClient.api(NginxAgentClientApis.configure()).withAuthorizationKey(authorizationKey(idNginx))
 				.withEndpoint(endpoint(idNginx)).withGzip(gzip).withMaxPostSize(maxPostSize).build().configure().join();
 	}
-	
-	public NginxResponse ping(String endpoint,String authorizationKey) {
+
+	public NginxResponse ping(String endpoint, String authorizationKey) {
 		return nginxAgentClient.api(NginxAgentClientApis.ping()).withAuthorizationKey(authorizationKey)
 				.withEndpoint(endpoint).build().ping().join();
 	}
@@ -147,19 +146,21 @@ public class NginxAgentRunner {
 	}
 
 	public NginxResponse createVirtualHost(Long idNginx, String uuid, List<String> aliases, String certificateUuid,
-			Boolean https, String certificatePrivateKeyUuid, List<Location> locations) {
+										   Boolean https, Long queueSize, String certificatePrivateKeyUuid,
+										   List<Location> locations) {
 		return nginxAgentClient.api(NginxAgentClientApis.virtualHost()).withUuid(uuid)
 				.withAuthorizationKey(authorizationKey(idNginx)).withEndpoint(endpoint(idNginx)).withAliases(aliases)
-				.withHttps(https).withCertificateUuid(certificateUuid)
+				.withHttps(https).withQueueSize(queueSize).withCertificateUuid(certificateUuid)
 				.withCertificatePrivateKeyUuid(certificatePrivateKeyUuid).withLocations(locations).build().create()
 				.join();
 	}
 
 	public NginxResponse updateVirtualHost(Long idNginx, String uuid, List<String> aliases, String certificateUuid,
-			Boolean https, String certificatePrivateKeyUuid, List<Location> locations) {
+										   Boolean https, Long queueSize, String certificatePrivateKeyUuid,
+										   List<Location> locations) {
 		return nginxAgentClient.api(NginxAgentClientApis.virtualHost()).withUuid(uuid)
 				.withAuthorizationKey(authorizationKey(idNginx)).withEndpoint(endpoint(idNginx)).withAliases(aliases)
-				.withHttps(https).withCertificateUuid(certificateUuid)
+				.withHttps(https).withQueueSize(queueSize).withCertificateUuid(certificateUuid)
 				.withCertificatePrivateKeyUuid(certificatePrivateKeyUuid).withLocations(locations).build().create()
 				.join();
 	}

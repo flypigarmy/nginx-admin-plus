@@ -27,10 +27,15 @@ server {
 	</#if>
           
        	server_name <#list aliases as alias> ${ alias } </#list>;
-        
+
+        set_by_lua_file $queue_size ../lualib/ob/ob_queue_set.lua ${ queueSize };
+
     <#list locations as location>
     	
     	location ${ location.path } {
+            set $queue_priority ${ location.queuePriority };
+            set $queue_handler ${ location.queueHandler };
+            content_by_lua_file ../lualib/ob/ob_que_handle.lua;
       		proxy_pass  http://${ location.upstream };
     	}
     	

@@ -1,5 +1,12 @@
 package com.jslsolucoes.nginx.admin.nginx.parser;
 
+import com.jslsolucoes.nginx.admin.nginx.parser.directive.Directive;
+import com.jslsolucoes.nginx.admin.nginx.parser.directive.LocationDirective;
+import com.jslsolucoes.nginx.admin.nginx.parser.directive.SslDirective;
+import com.jslsolucoes.nginx.admin.nginx.parser.directive.VirtualHostDirective;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -9,14 +16,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import com.jslsolucoes.nginx.admin.nginx.parser.directive.Directive;
-import com.jslsolucoes.nginx.admin.nginx.parser.directive.LocationDirective;
-import com.jslsolucoes.nginx.admin.nginx.parser.directive.SslDirective;
-import com.jslsolucoes.nginx.admin.nginx.parser.directive.VirtualHostDirective;
 
 public class ServerParser implements Parser {
 
@@ -53,6 +52,12 @@ public class ServerParser implements Parser {
 				virtualHost.setSslCertificateKey(ssl(sslCertificateKey.group(2)));
 			}
 
+			Matcher queueSize = Pattern.compile("set_by_lua_file\\s{1,}\\$queue_size\\s{1,}(.*?)\\s{1,}(\\d*)\\s*;")
+					.matcher(block);
+			if (queueSize.find()) {
+				virtualHost.setQueueSize(Long.valueOf(queueSize.group(2)));
+			}
+
 			virtualHost.setLocations(locations(block));
 			virtualHosts.add(virtualHost);
 		}
@@ -82,6 +87,18 @@ public class ServerParser implements Parser {
 			Matcher upstream = Pattern.compile("proxy_pass(\\s{1,})(https?:\\/\\/)(.*?);").matcher(locations.group(4));
 			while (upstream.find()) {
 				locationDirective.setUpstream(upstream.group(3));
+			}
+
+			Matcher queuePriority = Pattern.compile("set(\\s{1,})\\$queue_priority(\\s{1,})(\\d*);")
+					.matcher(locations.group(4));
+			while (queuePriority.find()) {
+				locationDirective.setQueuePriority(Integer.valueOf(queuePriority.group(3)));
+			}
+
+			Matcher queueHandler = Pattern.compile("set(\\s{1,})\\$queue_handler(\\s{1,})(.*);")
+					.matcher(locations.group(4));
+			while (queueHandler.find()) {
+				locationDirective.setQueueHandler(queueHandler.group(3));
 			}
 			locationDirectives.add(locationDirective);
 		}

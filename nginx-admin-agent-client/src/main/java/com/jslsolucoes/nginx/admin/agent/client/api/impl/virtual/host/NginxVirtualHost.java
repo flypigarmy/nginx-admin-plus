@@ -1,15 +1,5 @@
 package com.jslsolucoes.nginx.admin.agent.client.api.impl.virtual.host;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ScheduledExecutorService;
-
-import javax.enterprise.inject.Vetoed;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.jslsolucoes.nginx.admin.agent.client.RestClient;
 import com.jslsolucoes.nginx.admin.agent.client.api.NginxAgentClientApi;
 import com.jslsolucoes.nginx.admin.agent.client.api.impl.DefaultNginxAgentClientApi;
@@ -24,27 +14,39 @@ import com.jslsolucoes.nginx.admin.agent.model.response.virtual.host.NginxVirtua
 import com.jslsolucoes.nginx.admin.agent.model.response.virtual.host.NginxVirtualHostReadResponse;
 import com.jslsolucoes.nginx.admin.agent.model.response.virtual.host.NginxVirtualHostUpdateResponse;
 
+import javax.enterprise.inject.Vetoed;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ScheduledExecutorService;
+
 @Vetoed
 public class NginxVirtualHost extends DefaultNginxAgentClientApi implements NginxAgentClientApi {
 
 	private final ScheduledExecutorService scheduledExecutorService;
-	private final String endpoint;
-	private final String authorizationKey;
-	private final String uuid;
-	private final Boolean https;
-	private final String certificateUuid;
-	private final String certificatePrivateKeyUuid;
-	private final List<String> aliases;
-	private final List<Location> locations;
+	private final String                   endpoint;
+	private final String                   authorizationKey;
+	private final String                   uuid;
+	private final Boolean                  https;
+	private final Long                     queueSize;
+	private final String                   certificateUuid;
+	private final String                   certificatePrivateKeyUuid;
+	private final List<String>             aliases;
+	private final List<Location>           locations;
 
 	public NginxVirtualHost(ScheduledExecutorService scheduledExecutorService, String endpoint, String authorizationKey,
-			String uuid, Boolean https, String certificateUuid, String certificatePrivateKeyUuid, List<String> aliases,
-			List<Location> locations) {
+							String uuid, Boolean https, Long queueSize, String certificateUuid,
+							String certificatePrivateKeyUuid, List<String> aliases,
+							List<Location> locations) {
 		this.scheduledExecutorService = scheduledExecutorService;
 		this.endpoint = endpoint;
 		this.authorizationKey = authorizationKey;
 		this.uuid = uuid;
 		this.https = https;
+		this.queueSize = queueSize;
 		this.certificateUuid = certificateUuid;
 		this.certificatePrivateKeyUuid = certificatePrivateKeyUuid;
 		this.aliases = aliases;
@@ -55,7 +57,7 @@ public class NginxVirtualHost extends DefaultNginxAgentClientApi implements Ngin
 		return CompletableFuture.supplyAsync(() -> {
 			try (RestClient restClient = RestClient.build()) {
 				NginxVirtualHostUpdateRequest nginxVirtualHostUpdateRequest = new NginxVirtualHostUpdateRequest(https,
-						certificateUuid, certificatePrivateKeyUuid, aliases, locations);
+						queueSize, certificateUuid, certificatePrivateKeyUuid, aliases, locations);
 				Entity<NginxVirtualHostUpdateRequest> entity = Entity.entity(nginxVirtualHostUpdateRequest,
 						MediaType.APPLICATION_JSON);
 				WebTarget webTarget = restClient.target(endpoint);
@@ -72,7 +74,7 @@ public class NginxVirtualHost extends DefaultNginxAgentClientApi implements Ngin
 		return CompletableFuture.supplyAsync(() -> {
 			try (RestClient restClient = RestClient.build()) {
 				NginxVirtualHostCreateRequest nginxVirtualHostCreateRequest = new NginxVirtualHostCreateRequest(uuid,
-						https, certificateUuid, certificatePrivateKeyUuid, aliases, locations);
+						https, queueSize, certificateUuid, certificatePrivateKeyUuid, aliases, locations);
 				Entity<NginxVirtualHostCreateRequest> entity = Entity.entity(nginxVirtualHostCreateRequest,
 						MediaType.APPLICATION_JSON);
 				WebTarget webTarget = restClient.target(endpoint);

@@ -144,6 +144,7 @@ public class VirtualHostController {
 					aliases,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificate().getUuid() : null,
 					(https != null && https == 1),
+					queueSize,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificatePrivateKey()
 							.getUuid() : null,
 					locations(locations, queuePriorities, queueHandlers, upstreams));
@@ -167,6 +168,7 @@ public class VirtualHostController {
 					aliases,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificate().getUuid() : null,
 					(https != null && https == 1),
+					queueSize,
 					sslCertificate != null ? sslCertificate.getResourceIdentifierCertificatePrivateKey()
 							.getUuid() : null,
 					locations(locations, queuePriorities, queueHandlers, upstreams));

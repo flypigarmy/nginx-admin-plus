@@ -4,10 +4,11 @@ import java.util.List;
 
 public class VirtualHostDirective implements Directive {
 
-	private Integer port;
-	private List<String> aliases;
-	private SslDirective sslCertificate;
-	private SslDirective sslCertificateKey;
+	private Integer                 port;
+	private Long                    queueSize;
+	private List<String>            aliases;
+	private SslDirective            sslCertificate;
+	private SslDirective            sslCertificateKey;
 	private List<LocationDirective> locations;
 
 	public Integer getPort() {
@@ -16,6 +17,14 @@ public class VirtualHostDirective implements Directive {
 
 	public void setPort(Integer port) {
 		this.port = port;
+	}
+
+	public Long getQueueSize() {
+		return queueSize;
+	}
+
+	public void setQueueSize(Long queueSize) {
+		this.queueSize = queueSize;
 	}
 
 	public List<String> getAliases() {

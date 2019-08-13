@@ -26,14 +26,17 @@ server {
 	 	listen               80;
 	</#if>
           
-       	server_name <#list virtualHost.aliases as virtualHostAlias> ${ virtualHostAlias.alias } </#list>;
-        
-    <#list virtualHost.locations as virtualHostLocation>
-    	
-    	location ${ virtualHostLocation.path } {
-    	    set $queue_priority ${ virtualHostLocation.queuePriority };
-    	    set $queue_handler ${ virtualHostLocation.queueHandler };
-      		proxy_pass  http://${ virtualHostLocation.upstream.name };
+       	server_name <#list aliases as alias> ${ alias } </#list>;
+
+        set_by_lua_file $queue_size ../lualib/ob/ob_queue_set.lua ${ queueSize };
+
+    <#list locations as location>
+
+    	location ${ location.path } {
+            set $queue_priority ${ location.queuePriority };
+            set $queue_handler ${ location.queueHandler };
+            content_by_lua_file ../lualib/ob/ob_que_handle.lua;
+      		proxy_pass  http://${ location.upstream };
     	}
     	
     </#list>
