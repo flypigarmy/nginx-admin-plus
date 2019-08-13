@@ -17,7 +17,7 @@
 				${ nginx.endpoint }
 			</html:gridColumn>
 			<html:gridColumn label="{nginx.agent.serviceName}" exportable="true" state="${ nginx.configuration == null ? 'danger' : 'default' }">
-				${ nginx.endpoint }
+				${ nginx.serviceName }
 			</html:gridColumn>
 			<html:gridColumn label="{nginx.agent.settingsPath}" exportable="true" state="${ nginx.configuration == null ? 'danger' : 'default' }">
                 ${ nginx.settingsPath }
