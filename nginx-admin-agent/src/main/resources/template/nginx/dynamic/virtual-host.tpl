@@ -15,7 +15,7 @@ server {
           
        	server_name <#list aliases as alias> ${ alias } </#list>;
 
-        set_by_lua_file $queue_size ../lualib/ob/ob_queue_set.lua ${ queueSize };
+        set_by_lua_file $queue_size ../lualib/ob/ob_queue_set.lua ${ queueSize?c };
 
     <#list locations as location>
     	
