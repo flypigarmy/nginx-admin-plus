@@ -124,52 +124,52 @@
 					</html:cardBody>
 				</html:card>
 			</html:col>
-			<html:col size="4">
+			<html:col size="4" rendered="${ nginxStatusResponse != null }">
 				<html:card>
 					<html:cardBody>
-						<html:panel>
-							<html:panelHead label="{nginx.status}"></html:panelHead>
-							<html:panelBody>
-								<html:listGroup rendered="${ nginxStatusResponse.success() }">
-									<html:listGroupItem>
-										<fmt:message key="nginx.active">
-											<fmt:param value="${ nginxStatusResponse.activeConnection }"></fmt:param>
-										</fmt:message>
-									</html:listGroupItem>
-									<html:listGroupItem>
-										<fmt:message key="nginx.accepts">
-											<fmt:param value="${ nginxStatusResponse.accepts }"></fmt:param>
-										</fmt:message>
-									</html:listGroupItem>
-									<html:listGroupItem>
-										<fmt:message key="nginx.handled">
-											<fmt:param value="${ nginxStatusResponse.handled }"></fmt:param>
-										</fmt:message>
-									</html:listGroupItem>
-									<html:listGroupItem>
-										<fmt:message key="nginx.requests">
-											<fmt:param value="${ nginxStatusResponse.requests }"></fmt:param>
-										</fmt:message>
-									</html:listGroupItem>
-									<html:listGroupItem>
-										<fmt:message key="nginx.reading">
-											<fmt:param value="${ nginxStatusResponse.reading }"></fmt:param>
-										</fmt:message>
-									</html:listGroupItem>
-									<html:listGroupItem>
-										<fmt:message key="nginx.writing">
-											<fmt:param value="${ nginxStatusResponse.writing }"></fmt:param>
-										</fmt:message>
-									</html:listGroupItem>
-									<html:listGroupItem>
-										<fmt:message key="nginx.waiting">
-											<fmt:param value="${ nginxStatusResponse.waiting }"></fmt:param>
-										</fmt:message>
-									</html:listGroupItem>
-								</html:listGroup>
-								<html:alert state="danger" rendered="${ nginxStatusResponse.error() }" label="{nginx.agent.connection.error}"/>
-							</html:panelBody>
-						</html:panel>
+                        <html:panel>
+                            <html:panelHead label="{nginx.status}"></html:panelHead>
+                            <html:panelBody>
+                                <html:listGroup rendered="${ nginxStatusResponse.success() }">
+                                    <html:listGroupItem>
+                                        <fmt:message key="nginx.active">
+                                            <fmt:param value="${ nginxStatusResponse.activeConnection }"></fmt:param>
+                                        </fmt:message>
+                                    </html:listGroupItem>
+                                    <html:listGroupItem>
+                                        <fmt:message key="nginx.accepts">
+                                            <fmt:param value="${ nginxStatusResponse.accepts }"></fmt:param>
+                                        </fmt:message>
+                                    </html:listGroupItem>
+                                    <html:listGroupItem>
+                                        <fmt:message key="nginx.handled">
+                                            <fmt:param value="${ nginxStatusResponse.handled }"></fmt:param>
+                                        </fmt:message>
+                                    </html:listGroupItem>
+                                    <html:listGroupItem>
+                                        <fmt:message key="nginx.requests">
+                                            <fmt:param value="${ nginxStatusResponse.requests }"></fmt:param>
+                                        </fmt:message>
+                                    </html:listGroupItem>
+                                    <html:listGroupItem>
+                                        <fmt:message key="nginx.reading">
+                                            <fmt:param value="${ nginxStatusResponse.reading }"></fmt:param>
+                                        </fmt:message>
+                                    </html:listGroupItem>
+                                    <html:listGroupItem>
+                                        <fmt:message key="nginx.writing">
+                                            <fmt:param value="${ nginxStatusResponse.writing }"></fmt:param>
+                                        </fmt:message>
+                                    </html:listGroupItem>
+                                    <html:listGroupItem>
+                                        <fmt:message key="nginx.waiting">
+                                            <fmt:param value="${ nginxStatusResponse.waiting }"></fmt:param>
+                                        </fmt:message>
+                                    </html:listGroupItem>
+                                </html:listGroup>
+                                <html:alert state="danger" rendered="${ nginxStatusResponse.error() }" label="{nginx.agent.connection.error}"/>
+                            </html:panelBody>
+                        </html:panel>
 					</html:cardBody>
 				</html:card>
 			</html:col>
