@@ -44,6 +44,12 @@ NGINX_ADMIN_AGENT_LOCKFILE=/var/lock/subsys/$NGINX_ADMIN_AGENT_NAME
 STARTUP_WAIT=30
 SHUTDOWN_WAIT=30
 
+if [ "$NGINX_ADMIN_AGENT_REMOTE_DEBUG" eq "1" ]; then
+  DEBUG_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,address=8888,server=y,suspend=y
+else
+  DEBUG_ARGS=""
+fi
+
 pid_exists(){
 	test -f $NGINX_ADMIN_AGENT_PIDFILE
 }
@@ -85,7 +91,7 @@ try_launch() {
 	rm -f $NGINX_ADMIN_AGENT_CONSOLE_LOG
 	chown $NGINX_ADMIN_AGENT_USER $(dirname $NGINX_ADMIN_AGENT_PIDFILE) || true
 	
-	runuser $NGINX_ADMIN_AGENT_USER -c "$JAVA -server -Djava.net.preferIPv4Stack=true -Djava.awt.headless=true -Xms256m -Xmx1g -jar $NGINX_ADMIN_AGENT_BIN/nginx-admin-agent-standalone-$NGINX_ADMIN_AGENT_VERSION-swarm.jar -c $NGINX_ADMIN_AGENT_CONF/nginx-admin-agent.conf" >> $NGINX_ADMIN_AGENT_CONSOLE_LOG 2>&1 & echo $! > $NGINX_ADMIN_AGENT_PIDFILE
+	runuser $NGINX_ADMIN_AGENT_USER -c "$JAVA $DEBUG_ARGS -server -Djava.net.preferIPv4Stack=true -Djava.awt.headless=true -Xms256m -Xmx1g -jar $NGINX_ADMIN_AGENT_BIN/nginx-admin-agent-standalone-$NGINX_ADMIN_AGENT_VERSION-swarm.jar -c $NGINX_ADMIN_AGENT_CONF/nginx-admin-agent.conf" >> $NGINX_ADMIN_AGENT_CONSOLE_LOG 2>&1 & echo $! > $NGINX_ADMIN_AGENT_PIDFILE
 	
 	if ! is_launched ; then
 		rm -f $NGINX_ADMIN_AGENT_PIDFILE
