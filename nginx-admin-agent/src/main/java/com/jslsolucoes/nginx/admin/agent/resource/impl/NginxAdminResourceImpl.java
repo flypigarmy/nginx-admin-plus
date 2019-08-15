@@ -94,7 +94,7 @@ public class NginxAdminResourceImpl {
 		Validate.notEmpty(settings, "settings not set");
 		executeCommand("sudo mkdir -p " + settings);
 		executeCommand("sudo chmod -R 755 " + settings);
-		executeCommand("sudo chown -R " + user() + ":" + user() + settings);
+		executeCommand("sudo chown -R " + user() + ":" + user() + " " + settings);
 	}
 
 	private void executeCommand(String command) {
