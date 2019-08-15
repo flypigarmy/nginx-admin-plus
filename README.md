@@ -1,62 +1,33 @@
-[![][travis img]][travis]
-[![][license img]][license]
-[![][sonar img]][sonar]
-[![][bugs img]][bugs]
-[![][coverage img]][coverage]
-[![][lines img]][lines]
-[![][vulnerabilities img]][vulnerabilities]
-[![][code_smells img]][code_smells]
-[![][paypal img]][paypal]
+# nginx-admin plus
 
-[travis]:https://travis-ci.org/jslsolucoes/nginx-admin
-[travis img]:https://travis-ci.org/jslsolucoes/nginx-admin.svg?branch=master
+Nginx admin plus is an open source multiplatform manager for nginx software
 
-[license]:LICENSE
-[license img]:https://img.shields.io/badge/License-Apache%202-blue.svg
+original fork from https://github.com/jslsolucoes/nginx-admin
 
-[sonar]:https://sonarcloud.io/dashboard/index/com.jslsolucoes:nginx-admin
-[sonar img]:https://sonarcloud.io/api/badges/gate?key=com.jslsolucoes:nginx-admin
+# user guide
 
-[bugs]:https://sonarcloud.io/dashboard/index/com.jslsolucoes:nginx-admin
-[bugs img]:https://sonarcloud.io/api/badges/measure?key=com.jslsolucoes:nginx-admin&metric=bugs
-
-[coverage]:https://sonarcloud.io/dashboard/index/com.jslsolucoes:nginx-admin
-[coverage img]:https://sonarcloud.io/api/badges/measure?key=com.jslsolucoes:nginx-admin&metric=coverage
-
-[bugs]:https://sonarcloud.io/dashboard/index/com.jslsolucoes:nginx-admin
-[bugs img]:https://sonarcloud.io/api/badges/measure?key=com.jslsolucoes:nginx-admin&metric=bugs
-
-[lines]:https://sonarcloud.io/dashboard/index/com.jslsolucoes:nginx-admin
-[lines img]:https://sonarcloud.io/api/badges/measure?key=com.jslsolucoes:nginx-admin&metric=lines
-
-[vulnerabilities]:https://sonarcloud.io/dashboard/index/com.jslsolucoes:nginx-admin
-[vulnerabilities img]:https://sonarcloud.io/api/badges/measure?key=com.jslsolucoes:nginx-admin&metric=vulnerabilities
-
-[code_smells]:https://sonarcloud.io/dashboard/index/com.jslsolucoes:nginx-admin
-[code_smells img]:https://sonarcloud.io/api/badges/measure?key=com.jslsolucoes:nginx-admin&metric=code_smells
-
-[paypal]:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PE25DPU3CNFH4
-[paypal img]:https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif
-
-# nginx-admin
-Nginx admin is an open source multiplatform manager for nginx software
-
-Welcome to the new brand Nginx Admin 2.x-RC4 with a lot of improvments and bug fixes. 
-This milestone develop was a great breakthrough in system arch and unfortunately break compatibility with old 1.x version. 
-You can check new way to install components arch and new features like manager multiple nginx in a single manager ui on hot site.
-
-<a href="http://ng-admin.jslsolucoes.com" target="_blank">Click here to check installation details, configurations, features, tutorials, etc </a>
-
-<hr/>
-The default user for nginx admin ui manager is: 
+The default user for nginx admin ui manager is:
 Login :    admin
 Password : admin
 
-<hr/>
-Thanks for using nginx-admin.
-Issues or questions can be done in https://github.com/jslsolucoes/nginx-admin/issues. 
+> For premium support or to commercial, please contact : TBD@somesite.com
 
-<h5>For premium support or to comercial presentation of nginx admin enterprise edition (with lot of improvments like real time dashboard control, fully integration with previous nginx installation,lets encrypt ssl certificate integration support)  please contact : jonatan@jslsolucoes.com</h5>
+---
+
+# features plus
+
+more configurations items support
+- listen port for root server
+- self defined listen port for HTTP/HTTPS
+- transaction queue size and queue priority configuration for nginx plugn (TBD)
+- ...
+
+multiple nginx instances deploy support
+- status check based on pid file instead of nginx process name
+
+improvements
+- auto work path file privilege setting
+- ...
 
 ---
 
@@ -69,6 +40,8 @@ mvn clean install -DskipTests=true
 ```
 
 build process will generate some source code via JAXB.
+
+---
 
 # debug guide
 
