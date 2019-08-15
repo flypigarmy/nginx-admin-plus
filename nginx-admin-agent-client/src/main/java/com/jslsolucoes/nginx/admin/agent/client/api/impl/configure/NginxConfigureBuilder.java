@@ -1,17 +1,18 @@
 package com.jslsolucoes.nginx.admin.agent.client.api.impl.configure;
 
-import java.util.concurrent.ScheduledExecutorService;
-
 import com.jslsolucoes.nginx.admin.agent.client.api.NginxAgentClientApiBuilder;
 import com.jslsolucoes.nginx.admin.agent.client.api.impl.DefaultNginxAgentClientApi;
+
+import java.util.concurrent.ScheduledExecutorService;
 
 public class NginxConfigureBuilder extends DefaultNginxAgentClientApi implements NginxAgentClientApiBuilder {
 
 	private ScheduledExecutorService scheduledExecutorService;
-	private String endpoint;
-	private String authorizationKey;
-	private Integer maxPostSize;
-	private Boolean gzip;
+	private String                   endpoint;
+	private String                   authorizationKey;
+	private Integer                  maxPostSize;
+	private Integer                  rootPort;
+	private Boolean                  gzip;
 
 	private NginxConfigureBuilder() {
 
@@ -19,7 +20,7 @@ public class NginxConfigureBuilder extends DefaultNginxAgentClientApi implements
 
 	@Override
 	public NginxConfigure build() {
-		return new NginxConfigure(scheduledExecutorService, authorizationKey, endpoint, maxPostSize, gzip);
+		return new NginxConfigure(scheduledExecutorService, authorizationKey, endpoint, maxPostSize, rootPort, gzip);
 	}
 
 	public static NginxConfigureBuilder newBuilder() {
@@ -38,6 +39,11 @@ public class NginxConfigureBuilder extends DefaultNginxAgentClientApi implements
 
 	public NginxConfigureBuilder withMaxPostSize(Integer maxPostSize) {
 		this.maxPostSize = maxPostSize;
+		return this;
+	}
+
+	public NginxConfigureBuilder withRootPort(Integer rootPort) {
+		this.rootPort = rootPort;
 		return this;
 	}
 

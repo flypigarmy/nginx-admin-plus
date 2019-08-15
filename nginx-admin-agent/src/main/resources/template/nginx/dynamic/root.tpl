@@ -1,5 +1,5 @@
 server {
-        listen       80;
+        listen       ${ rootPort?c };
         server_name  localhost;
         location / {
             root   ${ settings }/html;

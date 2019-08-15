@@ -1,12 +1,5 @@
 package com.jslsolucoes.nginx.admin.agent.resource.impl;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-
 import com.jslsolucoes.file.system.FileSystemBuilder;
 import com.jslsolucoes.nginx.admin.agent.config.Configuration;
 import com.jslsolucoes.nginx.admin.agent.resource.impl.info.NginxInfo;
@@ -17,12 +10,18 @@ import com.jslsolucoes.nginx.admin.agent.resource.impl.status.NginxStatus;
 import com.jslsolucoes.nginx.admin.agent.resource.impl.status.NginxStatusDiscover;
 import com.jslsolucoes.template.TemplateBuilder;
 
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 @RequestScoped
 public class NginxAdminResourceImpl {
 
-	private NginxInfoDiscover nginxInfoDiscover;
+	private NginxInfoDiscover   nginxInfoDiscover;
 	private NginxStatusDiscover nginxStatusDiscover;
-	private Configuration configuration;
+	private Configuration       configuration;
 
 	@Deprecated
 	public NginxAdminResourceImpl() {
@@ -31,40 +30,42 @@ public class NginxAdminResourceImpl {
 
 	@Inject
 	public NginxAdminResourceImpl(NginxInfoDiscover nginxInfoDiscover, NginxStatusDiscover nginxStatusDiscover,
-			Configuration configuration) {
+								  Configuration configuration) {
 		this.configuration = configuration;
 		this.nginxInfoDiscover = nginxInfoDiscover;
 		this.nginxStatusDiscover = nginxStatusDiscover;
 	}
 
-	public NginxOperationResult configure(Integer maxPostSize, Boolean gzip) {
+	public NginxOperationResult configure(Integer maxPostSize, Integer rootPort, Boolean gzip) {
 		try {
 			applyFs();
-			applyTemplate(maxPostSize, gzip);
+			applyTemplate(maxPostSize, rootPort, gzip);
 			return new NginxOperationResult(NginxOperationResultType.SUCCESS);
 		} catch (Exception exception) {
 			return new NginxOperationResult(NginxOperationResultType.ERROR, exception);
 		}
 	}
 
-	private void applyTemplate(Integer maxPostSize, Boolean gzip) {
+	private void applyTemplate(Integer maxPostSize, Integer rootPort, Boolean gzip) {
 		String settings = settings();
-		try(FileWriter fileWriter = new FileWriter(new File(virtualHost(), "root.conf"))) {
+		try (FileWriter fileWriter = new FileWriter(new File(virtualHost(), "root.conf"))) {
 			TemplateBuilder.newBuilder()
-				.withClasspathTemplate("/template/nginx/dynamic", "root.tpl")
-			.withData("settings", settings).withOutput(fileWriter).process();
+					.withClasspathTemplate("/template/nginx/dynamic", "root.tpl")
+					.withData("settings", settings)
+					.withData("rootPort", rootPort)
+					.withOutput(fileWriter).process();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		
-		try(FileWriter fileWriter = new FileWriter(new File(settings, "nginx.conf"))) {
+
+		try (FileWriter fileWriter = new FileWriter(new File(settings, "nginx.conf"))) {
 			TemplateBuilder.newBuilder()
-			.withClasspathTemplate("/template/nginx/dynamic", "nginx.tpl").withData("settings", settings)
-			.withData("gzip", gzip).withData("maxPostSize", maxPostSize)
-			.withOutput(fileWriter).process();
+					.withClasspathTemplate("/template/nginx/dynamic", "nginx.tpl").withData("settings", settings)
+					.withData("gzip", gzip).withData("maxPostSize", maxPostSize)
+					.withOutput(fileWriter).process();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
-		}		
+		}
 	}
 
 	private File virtualHost() {

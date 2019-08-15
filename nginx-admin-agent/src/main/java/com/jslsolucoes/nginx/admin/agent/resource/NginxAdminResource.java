@@ -1,15 +1,5 @@
 package com.jslsolucoes.nginx.admin.agent.resource;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.jslsolucoes.nginx.admin.agent.auth.AuthHandler;
 import com.jslsolucoes.nginx.admin.agent.error.ErrorHandler;
 import com.jslsolucoes.nginx.admin.agent.model.request.NginxConfigureRequest;
@@ -22,6 +12,16 @@ import com.jslsolucoes.nginx.admin.agent.resource.impl.NginxOperationResult;
 import com.jslsolucoes.nginx.admin.agent.resource.impl.info.NginxInfo;
 import com.jslsolucoes.nginx.admin.agent.resource.impl.os.OperationalSystemInfo;
 import com.jslsolucoes.nginx.admin.agent.resource.impl.status.NginxStatus;
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("admin")
 @ErrorHandler
@@ -45,7 +45,9 @@ public class NginxAdminResource {
 	@Path("configure")
 	public void configure(NginxConfigureRequest nginxConfigureRequest, @Suspended AsyncResponse asyncResponse) {
 		NginxOperationResult nginxOperationResult = nginxAdminResourceImpl
-				.configure(nginxConfigureRequest.getMaxPostSize(), nginxConfigureRequest.getGzip());
+				.configure(nginxConfigureRequest.getMaxPostSize(),
+						nginxConfigureRequest.getRootPort(),
+						nginxConfigureRequest.getGzip());
 		asyncResponse.resume(Response
 				.ok(new NginxConfigureResponse(nginxOperationResult.getOutput(), nginxOperationResult.isSuccess()))
 				.build());

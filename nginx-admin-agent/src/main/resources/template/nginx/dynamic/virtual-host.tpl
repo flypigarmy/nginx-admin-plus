@@ -1,7 +1,7 @@
 
 server {
 	<#if https>
-		listen               ${ listenPort } ssl;
+		listen               ${ listenPort?c } ssl;
 		ssl_certificate      ${ settings }/ssl/${ certificateUuid }.ssl;
 		ssl_certificate_key  ${ settings }/ssl/${ certificatePrivateKeyUuid }.ssl;
 		ssl_protocols TLSv1 TLSv1.1 TLSv1.2;

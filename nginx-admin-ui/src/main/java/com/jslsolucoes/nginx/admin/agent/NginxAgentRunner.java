@@ -55,9 +55,16 @@ public class NginxAgentRunner {
 				.join();
 	}
 
-	public NginxResponse configure(Long idNginx, Boolean gzip, Integer maxPostSize) {
-		return nginxAgentClient.api(NginxAgentClientApis.configure()).withAuthorizationKey(authorizationKey(idNginx))
-				.withEndpoint(endpoint(idNginx)).withGzip(gzip).withMaxPostSize(maxPostSize).build().configure().join();
+	public NginxResponse configure(Long idNginx, Boolean gzip, Integer maxPostSize, Integer rootPort) {
+		return nginxAgentClient.api(NginxAgentClientApis.configure())
+				.withAuthorizationKey(authorizationKey(idNginx))
+				.withEndpoint(endpoint(idNginx))
+				.withGzip(gzip)
+				.withMaxPostSize(maxPostSize)
+				.withRootPort(rootPort)
+				.build()
+				.configure()
+				.join();
 	}
 
 	public NginxResponse ping(String endpoint, String authorizationKey) {

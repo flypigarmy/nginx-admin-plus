@@ -28,6 +28,11 @@
 					type="number" maxLength="9999"
 					placeholder="{nginx.configure.max.post.size.placeholder}" required="true"></html:input>
 			</html:formGroup>
+			<html:formGroup label="{nginx.configure.root.listen.port}" required="true">
+				<html:input value="${ configuration == null ? 80 : configuration.rootPort }" name="rootPort"
+					type="number" maxLength="5"
+					placeholder="{nginx.configure.root.listen.port.placeholder}" required="true"></html:input>
+			</html:formGroup>
 			<html:toolbar>
 				<html:button state="primary" type="submit"
 					label="{nginx.configure.apply.settings}"></html:button>
