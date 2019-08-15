@@ -124,13 +124,13 @@
 					</html:cardBody>
 				</html:card>
 			</html:col>
-			<html:col size="4" rendered="${ nginxStatusResponse != null }">
+			<html:col size="4">
 				<html:card>
 					<html:cardBody>
                         <html:panel>
                             <html:panelHead label="{nginx.status}"></html:panelHead>
                             <html:panelBody>
-                                <html:listGroup rendered="${ nginxStatusResponse.success() }">
+                                <html:listGroup rendered="${ nginxCommandLineInterfaceResponse != null && nginxStatusResponse.success() }">
                                     <html:listGroupItem>
                                         <fmt:message key="nginx.active">
                                             <fmt:param value="${ nginxStatusResponse.activeConnection }"></fmt:param>

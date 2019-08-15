@@ -10,6 +10,7 @@ import com.jslsolucoes.nginx.admin.agent.resource.impl.status.NginxStatus;
 import com.jslsolucoes.nginx.admin.agent.resource.impl.status.NginxStatusDiscover;
 import com.jslsolucoes.runtime.RuntimeBuilder;
 import com.jslsolucoes.runtime.RuntimeResult;
+import com.jslsolucoes.runtime.RuntimeResultType;
 import com.jslsolucoes.template.TemplateBuilder;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -91,15 +92,18 @@ public class NginxAdminResourceImpl {
 
 	private void initFsPrivilege(String settings) {
 		Validate.notEmpty(settings, "settings not set");
-		RuntimeResult execute = RuntimeBuilder.newBuilder().withCommand("sudo mkdir -p " + settings).execute();
-		logger.info("mkdir, settings={}, success={}, result={}", settings, execute.isSuccess(), execute.getOutput());
+		executeCommand("sudo mkdir -p " + settings);
+		executeCommand("sudo chmod -R 755 " + settings);
+		executeCommand("sudo chown -R " + user() + ":" + user() + settings);
+	}
 
-		execute = RuntimeBuilder.newBuilder().withCommand("sudo chmod -R 755 " + settings).execute();
-		logger.info("chmod, settings={}, success={}, result={}", settings, execute.isSuccess(), execute.getOutput());
-
-		execute = RuntimeBuilder.newBuilder()
-				.withCommand("sudo chown -R " + user() + ":" + user() + settings).execute();
-		logger.info("chown, settings={}, success={}, result={}", settings, execute.isSuccess(), execute.getOutput());
+	private void executeCommand(String command) {
+		RuntimeResult execute = RuntimeBuilder.newBuilder().withCommand(command).execute();
+		logger.info("executeCommand, command={}, success={}, result={}",
+				command, execute.isSuccess(), execute.getOutput());
+		if (!execute.isSuccess() || RuntimeResultType.ERROR.equals(execute.getRuntimeResultType())) {
+			throw new RuntimeException("command " + command + " failed: " + execute.getOutput());
+		}
 	}
 
 	private String user() {
