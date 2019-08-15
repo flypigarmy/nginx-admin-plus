@@ -1,8 +1,8 @@
 package com.jslsolucoes.nginx.admin.agent.config;
 
-import java.util.Properties;
-
 import com.jslsolucoes.properties.PropertiesBuilder;
+
+import java.util.Properties;
 
 public class ConfigurationLoader {
 
@@ -46,6 +46,7 @@ public class ConfigurationLoader {
 		application.setVersion(properties.getProperty("NGINX_ADMIN_AGENT_VERSION"));
 		application.setUrlBase(properties.getProperty("NGINX_ADMIN_AGENT_URL_BASE"));
 		application.setAuthorizationKey(properties.getProperty("NGINX_ADMIN_AGENT_AUTHORIZATION_KEY"));
+		application.setUser(properties.getProperty("NGINX_ADMIN_AGENT_USER"));
 		return application;
 	}
 

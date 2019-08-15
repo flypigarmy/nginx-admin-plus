@@ -1,9 +1,11 @@
 package com.jslsolucoes.nginx.admin.agent.config;
 
 public class Application {
+
 	private String version;
 	private String urlBase;
 	private String authorizationKey;
+	private String user;
 
 	public String getVersion() {
 		return version;
@@ -27,5 +29,13 @@ public class Application {
 
 	public void setAuthorizationKey(String authorizationKey) {
 		this.authorizationKey = authorizationKey;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
 	}
 }
