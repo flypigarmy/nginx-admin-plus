@@ -1,14 +1,13 @@
 package com.jslsolucoes.nginx.admin.agent.resource.impl;
 
-import java.nio.file.Paths;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-
 import com.jslsolucoes.nginx.admin.agent.config.Configuration;
 import com.jslsolucoes.runtime.RuntimeBuilder;
 import com.jslsolucoes.runtime.RuntimeResult;
 import com.jslsolucoes.runtime.RuntimeResultType;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import java.nio.file.Paths;
 
 @RequestScoped
 public class NginxCommandLineInterfaceResourceImpl {
@@ -50,7 +49,11 @@ public class NginxCommandLineInterfaceResourceImpl {
 	}
 
 	public RuntimeResult status() {
-		return RuntimeBuilder.newBuilder().withCommand("sudo pgrep nginx").execute();
+		return RuntimeBuilder.newBuilder().withCommand("sudo ps -p `cat " + pid() + "`").execute();
+	}
+
+	private String pid() {
+		return Paths.get(configuration.getNginx().getSetting(), "nginx.pid").toAbsolutePath().toString();
 	}
 
 	private String conf() {
