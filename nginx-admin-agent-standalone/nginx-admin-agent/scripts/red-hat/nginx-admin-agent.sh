@@ -44,8 +44,8 @@ NGINX_ADMIN_AGENT_LOCKFILE=/var/lock/subsys/$NGINX_ADMIN_AGENT_NAME
 STARTUP_WAIT=30
 SHUTDOWN_WAIT=30
 
-if [ "$NGINX_ADMIN_AGENT_REMOTE_DEBUG" eq "1" ]; then
-  DEBUG_ARGS=-Xdebug -Xrunjdwp:transport=dt_socket,address=8888,server=y,suspend=y
+if [ "$NGINX_ADMIN_AGENT_REMOTE_DEBUG" = '1' ]; then
+  DEBUG_ARGS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8888,server=y,suspend=y"
 else
   DEBUG_ARGS=""
 fi
