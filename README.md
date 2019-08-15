@@ -4,11 +4,17 @@ Nginx admin plus is an open source multiplatform manager for nginx software
 
 original fork from https://github.com/jslsolucoes/nginx-admin
 
+# deploy guide
+
+refer
+- `install/install-nginx-admin-agent.sh`
+- `install/install-nginx-admin-ui.sh`
+
 # user guide
 
 The default user for nginx admin ui manager is:
-Login :    admin
-Password : admin
+- Login :    admin
+- Password : admin
 
 > For premium support or to commercial, please contact : TBD@somesite.com
 
