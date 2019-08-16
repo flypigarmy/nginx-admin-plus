@@ -2,10 +2,6 @@
 
 > refer from https://www.cyberciti.biz/faq/install-nginx-centos-rhel-6-server-rpm-using-yum-command/
 
-### ~~install EPEL yum repo~~
-
-> EPEL yum repo not works in company network
-
 ```
 cd /tmp
 
@@ -41,6 +37,3 @@ service nginx status
 service nginx stop
 service nginx start
 ```
-
-
-
