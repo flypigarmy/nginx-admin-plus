@@ -2,25 +2,18 @@
 
 <settings>
 
-    <proxies>
-        <proxy>
-            <id>alilang</id>
-            <active>true</active>
-            <protocol>http</protocol>
-            <host>localhost</host>
-            <port>13658</port>
-            <nonProxyHosts>maven.aliyun.com</nonProxyHosts>
-        </proxy>
-    </proxies>
-
     <mirrors>
-        <mirror>
-            <id>alimaven</id>
-            <name>aliyun maven</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-            <mirrorOf>central</mirrorOf>
-        </mirror>
 
+        <!--  <mirror>-->
+        <!--      <id>alimaven</id>-->
+        <!--      <name>aliyun maven</name>-->
+        <!--      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>-->
+        <!--      <mirrorOf>central</mirrorOf>-->
+        <!--  </mirror>-->
+
+        <!-- add below mirror as some dependencies of jboss public   -->
+        <!--  cannot be found in http://repository.jboss.org/nexus/content/groups/public/   -->
+        <!--  but in http://repository.jboss.org/nexus/content/groups/public-jboss  /-->
         <mirror>
             <id>jbosspublic</id>
             <name>jboss public</name>
