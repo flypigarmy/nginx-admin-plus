@@ -49,7 +49,12 @@ public class NginxCommandLineInterfaceResourceImpl {
 	}
 
 	public RuntimeResult status() {
-		return RuntimeBuilder.newBuilder().withCommand("sudo ps -p `cat " + pid() + "`").execute();
+		RuntimeResult runtimeResult = RuntimeBuilder.newBuilder().withCommand("cat " + pid()).execute();
+		if (runtimeResult.isError()) {
+			return runtimeResult;
+		}
+		String pid = runtimeResult.getOutput();
+		return RuntimeBuilder.newBuilder().withCommand("sudo ps -p " + pid).execute();
 	}
 
 	private String pid() {
