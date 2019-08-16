@@ -1,23 +1,22 @@
 package com.jslsolucoes.nginx.admin.controller;
 
-import java.io.IOException;
-
-import javax.inject.Inject;
-
-import com.jslsolucoes.nginx.admin.error.NginxAdminException;
-import com.jslsolucoes.nginx.admin.model.Nginx;
-import com.jslsolucoes.nginx.admin.repository.ImportRepository;
-
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
+import com.jslsolucoes.nginx.admin.error.NginxAdminException;
+import com.jslsolucoes.nginx.admin.model.Nginx;
+import com.jslsolucoes.nginx.admin.repository.ImportRepository;
 
+import javax.inject.Inject;
+import java.io.IOException;
+
+@Deprecated
 @Controller
 @Path("import")
 public class ImportController {
 
-	private Result result;
+	private Result           result;
 	private ImportRepository importRepository;
 
 	@Deprecated
