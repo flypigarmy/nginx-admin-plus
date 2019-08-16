@@ -70,31 +70,33 @@
 			<html:formGroup>
 				<html:detailTable atLeast="1" data="${ virtualHost.locations  }"
 					var="virtualHostLocation" label="{virtualHost.locations}">
-					<html:detailTableColumn label="{virtualHost.location}"
-						required="true">
+					<html:detailTableColumn label="{virtualHost.location}" required="true">
 						<html:input name="locations[]"
 							value="${ virtualHostLocation.path }"
 							placeholder="{virtualHost.location.placeholder}" required="true"></html:input>
 					</html:detailTableColumn>
-					<html:detailTableColumn label="{virtualHost.queuePriority}"
-						required="true">
+					<html:detailTableColumn label="{virtualHost.queuePriority}" required="true">
 						<html:input name="queuePriorities[]"
 							value="${ virtualHostLocation.queuePriority }"
 							type="number"
 							placeholder="{virtualHost.queuePriority.placeholder}" required="true"></html:input>
 					</html:detailTableColumn>
-					<html:detailTableColumn label="{virtualHost.queueHandler}"
-						required="true">
+					<html:detailTableColumn label="{virtualHost.queueHandler}" required="true">
 						<html:input name="queueHandlers[]"
 							value="${ virtualHostLocation.queueHandler }"
 							placeholder="{virtualHost.queueHandler.placeholder}" required="true"></html:input>
 					</html:detailTableColumn>
-					<html:detailTableColumn label="{upstream.name}" required="true">
-						<html:select required="true" name="upstreams[]"
+					<html:detailTableColumn label="{upstream.name}" required="false">
+						<html:select required="false" name="upstreams[]"
 							value="${ virtualHostLocation.upstream.id }"
 							data="${ upstreamList }" var="upstream">
 							<html:option value="${ upstream.id }">${ upstream.name }</html:option>
 						</html:select>
+					</html:detailTableColumn>
+					<html:detailTableColumn label="{virtualHost.additionalLines}" required="false">
+                        <html:textarea name="additionalLineses[]"
+                            value="${ virtualHostLocation.additionalLines }"
+                            placeholder="{virtualHost.additionalLines.placeholder}" required="false"></html:textarea>
 					</html:detailTableColumn>
 				</html:detailTable>
 			</html:formGroup>

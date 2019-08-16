@@ -22,6 +22,9 @@ public class VirtualHostLocation implements Serializable {
 	@Column(name = "queue_handler")
 	private String queueHandler;
 
+	@Column(name = "additional_lines")
+	private String additionalLines;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_upstream")
 	private Upstream upstream;
@@ -34,16 +37,21 @@ public class VirtualHostLocation implements Serializable {
 		// default constructor
 	}
 
-	public VirtualHostLocation(String path, Upstream upstream) {
-		this.path = path;
-		this.upstream = upstream;
-	}
-
+	@Deprecated
 	public VirtualHostLocation(String path, Integer queuePriority, String queueHandler,
 							   Upstream upstream) {
 		this.path = path;
 		this.queuePriority = queuePriority;
 		this.queueHandler = queueHandler;
+		this.upstream = upstream;
+	}
+
+	public VirtualHostLocation(String path, Integer queuePriority, String queueHandler, String additionalLines,
+							   Upstream upstream) {
+		this.path = path;
+		this.queuePriority = queuePriority;
+		this.queueHandler = queueHandler;
+		this.additionalLines = additionalLines;
 		this.upstream = upstream;
 	}
 
@@ -77,6 +85,14 @@ public class VirtualHostLocation implements Serializable {
 
 	public void setQueueHandler(String queueHandler) {
 		this.queueHandler = queueHandler;
+	}
+
+	public String getAdditionalLines() {
+		return additionalLines;
+	}
+
+	public void setAdditionalLines(String additionalLines) {
+		this.additionalLines = additionalLines;
 	}
 
 	public Upstream getUpstream() {

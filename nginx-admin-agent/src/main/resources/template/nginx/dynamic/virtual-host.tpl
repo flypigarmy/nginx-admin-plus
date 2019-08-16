@@ -23,7 +23,10 @@ server {
             set $queue_priority ${ location.queuePriority?c };
             set $queue_handler ${ location.queueHandler };
             content_by_lua_file ../lualib/ob/ob_que_handle.lua;
-      		proxy_pass  http://${ location.upstream };
+
+            <#if location.upstream??>proxy_pass  http://${ location.upstream };</#if>
+
+            <#if location.additionalLines??>${ location.additionalLines }</#if>
     	}
     	
     </#list>

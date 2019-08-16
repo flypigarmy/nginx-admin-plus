@@ -17,7 +17,7 @@ service nginx stop
 #create user and add permission for running agent. you can also use visudo to add permissions below
 useradd nginx-admin-agent -r
 chmod 640 /etc/sudoers
-printf 'nginx-admin-agent ALL=(ALL) NOPASSWD:/usr/sbin/nginx,/usr/bin/pgrep nginx,/usr/bin/killall nginx,/usr/bin/chmod,/usr/bin/chown,/usr/bin/ps,/usr/bin/mkdir,/usr/bin/ps\nDefaults:nginx-admin-agent !requiretty\n' >> /etc/sudoers
+printf 'nginx-admin-agent ALL=(ALL) NOPASSWD:/usr/sbin/nginx,/usr/bin/pgrep nginx,/usr/bin/killall nginx,/usr/bin/chmod,/usr/bin/chown,/usr/bin/ps,/usr/bin/mkdir,/usr/bin/ps,/usr/bin/cat\nDefaults:nginx-admin-agent !requiretty\n' >> /etc/sudoers
 chmod 440 /etc/sudoers
 
 #download and extract latest version of nginx agent package

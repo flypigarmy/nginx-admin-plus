@@ -1,24 +1,22 @@
 package com.jslsolucoes.nginx.admin.repository.impl;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
+import net.vidageek.mirror.dsl.Mirror;
+import net.vidageek.mirror.list.dsl.Matcher;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-
-import org.apache.commons.collections.CollectionUtils;
-
-import net.vidageek.mirror.dsl.Mirror;
-import net.vidageek.mirror.list.dsl.Matcher;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 public abstract class RepositoryImpl<T> {
 
 	protected EntityManager entityManager;
-	private Class<T> clazz;
+	private   Class<T>      clazz;
 
 	@Deprecated
 	public RepositoryImpl() {
@@ -48,7 +46,8 @@ public abstract class RepositoryImpl<T> {
 	}
 
 	public T load(T entity) {
-		return load(id(entity));
+		Long id = id(entity);
+		return id == null ? null : load(id);
 	}
 
 	public T load(Long id) {
@@ -67,6 +66,7 @@ public abstract class RepositoryImpl<T> {
 
 	private Long id(T entity) {
 		Matcher<Field> matcher = new Matcher<Field>() {
+
 			@Override
 			public boolean accepts(Field field) {
 				return field.isAnnotationPresent(Id.class);

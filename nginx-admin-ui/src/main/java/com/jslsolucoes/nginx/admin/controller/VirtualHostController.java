@@ -80,8 +80,10 @@ public class VirtualHostController {
 	public void validate(Long id, Integer https, Integer listenPort, Long queueSize, String idResourceIdentifier,
 						 Long idSslCertificate,
 						 List<String> aliases, List<String> locations, List<Integer> queuePriorities,
-						 List<String> queueHandlers, List<Long> upstreams, Long idNginx) {
-		List<Location> locationList = locations(locations, queuePriorities, queueHandlers, upstreams);
+						 List<String> queueHandlers, List<Long> upstreams, List<String> additionalLineses,
+						 Long idNginx) {
+		List<Location> locationList = locations(
+				locations, queuePriorities, queueHandlers, upstreams, additionalLineses);
 		this.result.use(Results.json())
 				.from(FormValidation.newBuilder()
 						.toUnordenedList(virtualHostRepository.validateBeforeSaveOrUpdate(new VirtualHost(id,
@@ -134,7 +136,7 @@ public class VirtualHostController {
 	public void saveOrUpdate(Long id, Integer https, Integer listenPort, Long queueSize, Long idResourceIdentifier,
 							 Long idSslCertificate, List<String> aliases, List<String> locations,
 							 List<Integer> queuePriorities, List<String> queueHandlers, List<Long> upstreams,
-							 Long idNginx) {
+							 List<String> additionalLineses, Long idNginx) {
 
 		SslCertificate sslCertificate = null;
 		if (https == null) {
@@ -143,7 +145,8 @@ public class VirtualHostController {
 		if (https == 1) {
 			sslCertificate = sslCertificateRepository.load(new SslCertificate(idSslCertificate));
 		}
-		List<Location> locationList = locations(locations, queuePriorities, queueHandlers, upstreams);
+		List<Location> locationList = locations(
+				locations, queuePriorities, queueHandlers, upstreams, additionalLineses);
 		if (id == null) {
 			ResourceIdentifier resourceIdentifier = resourceIdentifierRepository.create();
 			NginxResponse nginxResponse = nginxAgentRunner.createVirtualHost(idNginx,
@@ -199,29 +202,21 @@ public class VirtualHostController {
 		}
 	}
 
-	@Deprecated
-	private List<Location> locations(List<String> locations, List<Long> upstreams) {
-		AtomicInteger atomicInteger = new AtomicInteger(0);
-		return locations.stream()
-				.map(location -> new Location(location,
-						upstream(new Upstream(upstreams.get(atomicInteger.getAndIncrement())))))
-				.collect(Collectors.toList());
-	}
-
 	private List<Location> locations(List<String> locations, List<Integer> queuePriorities, List<String> queueHandlers,
-									 List<Long> upstreams) {
+									 List<Long> upstreams, List<String> additionalLineses) {
 		AtomicInteger atomicInteger = new AtomicInteger(0);
 		return locations.stream().map(location -> {
 			int pos = atomicInteger.getAndIncrement();
 			return new Location(location,
 					queuePriorities.get(pos),
 					queueHandlers.get(pos),
-					upstream(new Upstream(upstreams.get(pos))));
+					upstreamName(new Upstream(upstreams.get(pos))),
+					additionalLineses.get(pos));
 		}).collect(Collectors.toList());
 	}
 
-	private String upstream(Upstream upstream) {
-		return upstreamRepository.load(upstream).getName();
+	private String upstreamName(Upstream upstream) {
+		return upstream.getId() == null ? null : upstreamRepository.load(upstream).getName();
 	}
 
 	private List<VirtualHostLocation> convert(List<Location> locations, List<Long> upstreams) {
@@ -230,10 +225,15 @@ public class VirtualHostController {
 				location -> new VirtualHostLocation(location.getPath(),
 						location.getQueuePriority(),
 						location.getQueueHandler(),
-						new Upstream(upstreams.get(atomicInteger.getAndIncrement()))));
+						location.getAdditionalLines(),
+						upstreamFromId(upstreams.get(atomicInteger.getAndIncrement()))));
 	}
 
 	private List<VirtualHostAlias> convert(List<String> aliases) {
 		return Lists.transform(aliases, VirtualHostAlias::new);
+	}
+
+	private Upstream upstreamFromId(Long id) {
+		return id == null ? null : new Upstream(id);
 	}
 }

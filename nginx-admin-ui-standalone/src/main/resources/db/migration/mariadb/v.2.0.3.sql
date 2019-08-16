@@ -9,3 +9,6 @@ alter table configuration add  root_port INT(5) not null default 80;
 
 alter table upstream add additional_lines VARCHAR(1024) null default null;
 
+alter table virtual_host_location add additional_lines VARCHAR(1024) null default null;
+alter table virtual_host_location modify  id_upstream bigint(10) null default null;
+

@@ -6,22 +6,26 @@ public class Location {
 	private Integer queuePriority;
 	private String  queueHandler;
 	private String  upstream;
+	private String  additionalLines;
 
 	public Location() {
 
 	}
 
 	@Deprecated
-	public Location(String path, String upstream) {
-		this.path = path;
-		this.upstream = upstream;
-	}
-
 	public Location(String path, Integer queuePriority, String queueHandler, String upstream) {
 		this.path = path;
 		this.queuePriority = queuePriority;
 		this.queueHandler = queueHandler;
 		this.upstream = upstream;
+	}
+
+	public Location(String path, Integer queuePriority, String queueHandler, String upstream, String additionalLines) {
+		this.path = path;
+		this.queuePriority = queuePriority;
+		this.queueHandler = queueHandler;
+		this.upstream = upstream;
+		this.additionalLines = additionalLines;
 	}
 
 	public String getPath() {
@@ -54,5 +58,13 @@ public class Location {
 
 	public void setQueueHandler(String queueHandler) {
 		this.queueHandler = queueHandler;
+	}
+
+	public String getAdditionalLines() {
+		return additionalLines;
+	}
+
+	public void setAdditionalLines(String additionalLines) {
+		this.additionalLines = additionalLines;
 	}
 }

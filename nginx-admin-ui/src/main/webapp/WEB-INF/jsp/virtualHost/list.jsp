@@ -40,7 +40,7 @@
 						${ virtualHostLocation.queueHandler }
 					</html:gridColumn>
 					<html:gridColumn label="{upstream.name}">
-						${ virtualHostLocation.upstream.name }
+						${ virtualHostLocation.upstream.name == null ? "" : virtualHostLocation.upstream.name }
 					</html:gridColumn>
 				</html:grid>
 			</html:gridColumn>
