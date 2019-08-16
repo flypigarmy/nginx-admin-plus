@@ -9,7 +9,10 @@ more configurations items support
 - [x] listen port for root server
 - [x] self defined listen port for HTTP/HTTPS
 - [x] transaction queue size and queue priority configuration for nginx plugin (link TBD)
-- [ ] ...
+- [x] additionalLine for self define configuration in
+    - location
+    - upstream
+- [x] ...
 
 multiple nginx instances deploy support
 - [x] status check based on pid file instead of nginx process name
