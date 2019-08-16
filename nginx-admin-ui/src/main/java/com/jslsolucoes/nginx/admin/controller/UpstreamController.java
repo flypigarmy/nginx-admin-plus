@@ -1,33 +1,5 @@
 package com.jslsolucoes.nginx.admin.controller;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
-import javax.inject.Inject;
-
-import com.google.common.collect.Lists;
-import com.jslsolucoes.i18n.Messages;
-import com.jslsolucoes.nginx.admin.agent.NginxAgentRunner;
-import com.jslsolucoes.nginx.admin.agent.model.Endpoint;
-import com.jslsolucoes.nginx.admin.agent.model.response.NginxResponse;
-import com.jslsolucoes.nginx.admin.agent.model.response.upstream.NginxUpstreamReadResponse;
-import com.jslsolucoes.nginx.admin.error.NginxAdminRuntimeException;
-import com.jslsolucoes.nginx.admin.model.Nginx;
-import com.jslsolucoes.nginx.admin.model.ResourceIdentifier;
-import com.jslsolucoes.nginx.admin.model.Server;
-import com.jslsolucoes.nginx.admin.model.Strategy;
-import com.jslsolucoes.nginx.admin.model.Upstream;
-import com.jslsolucoes.nginx.admin.model.UpstreamServer;
-import com.jslsolucoes.nginx.admin.repository.ResourceIdentifierRepository;
-import com.jslsolucoes.nginx.admin.repository.ServerRepository;
-import com.jslsolucoes.nginx.admin.repository.StrategyRepository;
-import com.jslsolucoes.nginx.admin.repository.UpstreamRepository;
-import com.jslsolucoes.nginx.admin.repository.impl.OperationResult;
-import com.jslsolucoes.nginx.admin.repository.impl.OperationStatusType;
-import com.jslsolucoes.tagria.lib.form.FormValidation;
-
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
@@ -35,16 +7,39 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.observer.download.Download;
 import br.com.caelum.vraptor.observer.download.InputStreamDownload;
 import br.com.caelum.vraptor.view.Results;
+import com.google.common.collect.Lists;
+import com.jslsolucoes.i18n.Messages;
+import com.jslsolucoes.nginx.admin.agent.NginxAgentRunner;
+import com.jslsolucoes.nginx.admin.agent.model.Endpoint;
+import com.jslsolucoes.nginx.admin.agent.model.response.NginxResponse;
+import com.jslsolucoes.nginx.admin.agent.model.response.upstream.NginxUpstreamReadResponse;
+import com.jslsolucoes.nginx.admin.error.NginxAdminRuntimeException;
+import com.jslsolucoes.nginx.admin.model.*;
+import com.jslsolucoes.nginx.admin.repository.ResourceIdentifierRepository;
+import com.jslsolucoes.nginx.admin.repository.ServerRepository;
+import com.jslsolucoes.nginx.admin.repository.StrategyRepository;
+import com.jslsolucoes.nginx.admin.repository.UpstreamRepository;
+import com.jslsolucoes.nginx.admin.repository.impl.OperationResult;
+import com.jslsolucoes.nginx.admin.repository.impl.OperationStatusType;
+import com.jslsolucoes.tagria.lib.form.FormValidation;
+import org.apache.commons.collections.CollectionUtils;
+
+import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Controller
 @Path("upstream")
 public class UpstreamController {
 
-	private Result result;
-	private UpstreamRepository upstreamRepository;
-	private ServerRepository serverRepository;
-	private StrategyRepository strategyRepository;
-	private NginxAgentRunner nginxAgentRunner;
+	private Result                       result;
+	private UpstreamRepository           upstreamRepository;
+	private ServerRepository             serverRepository;
+	private StrategyRepository           strategyRepository;
+	private NginxAgentRunner             nginxAgentRunner;
 	private ResourceIdentifierRepository resourceIdentifierRepository;
 
 	@Deprecated
@@ -54,8 +49,8 @@ public class UpstreamController {
 
 	@Inject
 	public UpstreamController(Result result, UpstreamRepository upstreamRepository, ServerRepository serverRepository,
-			StrategyRepository strategyRepository, NginxAgentRunner nginxAgentRunner,
-			ResourceIdentifierRepository resourceIdentifierRepository) {
+							  StrategyRepository strategyRepository, NginxAgentRunner nginxAgentRunner,
+							  ResourceIdentifierRepository resourceIdentifierRepository) {
 		this.result = result;
 		this.upstreamRepository = upstreamRepository;
 		this.serverRepository = serverRepository;
@@ -92,13 +87,13 @@ public class UpstreamController {
 	}
 
 	public void validate(Long id, String name, Long idStrategy, List<Long> servers, List<Integer> ports,
-			Long idResourceIdentifier, Long idNginx) {
+						 Long idResourceIdentifier, Long idNginx) {
 		this.result.use(Results.json())
 				.from(FormValidation.newBuilder()
-						.toUnordenedList(upstreamRepository.validateBeforeSaveOrUpdate(
-								new Upstream(id, name, new Strategy(idStrategy),
-										new ResourceIdentifier(idResourceIdentifier), new Nginx(idNginx)),
-								convert(servers, ports))),
+								.toUnordenedList(upstreamRepository.validateBeforeSaveOrUpdate(
+										new Upstream(id, name, new Strategy(idStrategy),
+												new ResourceIdentifier(idResourceIdentifier), new Nginx(idNginx)),
+										convert(servers, ports))),
 						"errors")
 				.serialize();
 	}
@@ -124,7 +119,7 @@ public class UpstreamController {
 
 	@Post
 	public void saveOrUpdate(Long id, String name, Long idStrategy, List<Long> servers, List<Integer> ports,
-			Long idNginx) {
+							 Long idNginx) {
 
 		if (id == null) {
 			ResourceIdentifier resourceIdentifier = resourceIdentifierRepository.create();
@@ -147,7 +142,7 @@ public class UpstreamController {
 					endpoints(servers, ports));
 			if (nginxResponse.success()) {
 				OperationResult operationResult = upstreamRepository.saveOrUpdate(new Upstream(id, name,
-						new Strategy(idStrategy), upstream.getResourceIdentifier(), new Nginx(idNginx)),
+								new Strategy(idStrategy), upstream.getResourceIdentifier(), new Nginx(idNginx)),
 						convert(servers, ports));
 				this.result.include("operation", operationResult.getOperationType());
 				this.result.redirectTo(this).edit(idNginx, operationResult.getId());
@@ -160,6 +155,9 @@ public class UpstreamController {
 	}
 
 	private List<Endpoint> endpoints(List<Long> servers, List<Integer> ports) {
+		if (CollectionUtils.isEmpty(servers)) {
+			return Collections.emptyList();
+		}
 		AtomicInteger atomicInteger = new AtomicInteger(0);
 		return servers.stream()
 				.map(idServer -> new Endpoint(server(new Server(idServer)), ports.get(atomicInteger.getAndIncrement())))
@@ -171,6 +169,9 @@ public class UpstreamController {
 	}
 
 	private List<UpstreamServer> convert(List<Long> servers, List<Integer> ports) {
+		if (CollectionUtils.isEmpty(servers)) {
+			return Collections.emptyList();
+		}
 		AtomicInteger atomicInteger = new AtomicInteger(0);
 		return Lists.transform(servers,
 				server -> new UpstreamServer(new Server(server), ports.get(atomicInteger.getAndIncrement())));

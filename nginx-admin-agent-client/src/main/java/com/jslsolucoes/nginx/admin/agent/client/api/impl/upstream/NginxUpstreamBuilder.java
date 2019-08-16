@@ -1,19 +1,27 @@
 package com.jslsolucoes.nginx.admin.agent.client.api.impl.upstream;
 
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-
 import com.jslsolucoes.nginx.admin.agent.client.api.NginxAgentClientApiBuilder;
 import com.jslsolucoes.nginx.admin.agent.model.Endpoint;
+
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class NginxUpstreamBuilder implements NginxAgentClientApiBuilder {
 
 	private ScheduledExecutorService scheduledExecutorService;
+
+	/**
+	 * nginx endpoint
+	 */
 	private String endpoint;
 	private String authorizationKey;
 	private String name;
 	private String uuid;
 	private String strategy;
+
+	/**
+	 * endpoints defined in Upstream
+	 */
 	private List<Endpoint> endpoints;
 
 	private NginxUpstreamBuilder() {

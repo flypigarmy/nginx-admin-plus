@@ -3,8 +3,6 @@
 Nginx admin plus is an open source multi-platform manager for nginx software,
 original fork from [nginx-admin](https://github.com/jslsolucoes/nginx-admin).
 
-> For enterprise support or to commercial, please contact : yizhou.xw@antfin.com
-
 ## features plus
 
 more configurations items support
