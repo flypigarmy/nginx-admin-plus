@@ -22,7 +22,14 @@ improvements
 
 ## deploy guide
 
-refer
+nginx install references
+- [install nginx in centos 6](docs/install_nginx_in_centos_6.md)
+- [nginx configuration guide](docs/nginx_configuration_guide.md)
+
+install nginx admin plus
+- [isntall nginx admin plus guide](docs/install_nginx_admin_guide.md)
+
+refer below scripts for understand nginx admin plus install
 - `install/install-nginx-admin-agent.sh`
 - `install/install-nginx-admin-ui.sh`
 
