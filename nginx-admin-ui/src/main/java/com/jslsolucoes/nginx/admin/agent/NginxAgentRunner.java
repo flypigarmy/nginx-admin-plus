@@ -35,17 +35,19 @@ public class NginxAgentRunner {
 		return nginxCommandLineInterface(idNginx).stop().join();
 	}
 
-	public NginxResponse createUpstream(Long idNginx, String uuid, String name, String strategy,
+	public NginxResponse createUpstream(Long idNginx, String uuid, String name, String additionalLines, String strategy,
 										List<Endpoint> endpoints) {
 		return nginxAgentClient.api(NginxAgentClientApis.upstream()).withUuid(uuid)
-				.withAuthorizationKey(authorizationKey(idNginx)).withEndpoint(endpoint(idNginx)).withName(name)
+				.withAuthorizationKey(authorizationKey(idNginx)).withEndpoint(endpoint(idNginx))
+				.withName(name).withAdditionalLines(additionalLines)
 				.withStrategy(strategy).withEndpoints(endpoints).build().create().join();
 	}
 
-	public NginxResponse updateUpstream(Long idNginx, String uuid, String name, String strategy,
+	public NginxResponse updateUpstream(Long idNginx, String uuid, String name, String additionalLines, String strategy,
 										List<Endpoint> endpoints) {
 		return nginxAgentClient.api(NginxAgentClientApis.upstream()).withUuid(uuid)
-				.withAuthorizationKey(authorizationKey(idNginx)).withEndpoint(endpoint(idNginx)).withName(name)
+				.withAuthorizationKey(authorizationKey(idNginx)).withEndpoint(endpoint(idNginx))
+				.withName(name).withAdditionalLines(additionalLines)
 				.withStrategy(strategy).withEndpoints(endpoints).build().update().join();
 	}
 

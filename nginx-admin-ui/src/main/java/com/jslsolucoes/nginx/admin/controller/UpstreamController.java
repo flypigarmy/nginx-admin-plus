@@ -86,12 +86,13 @@ public class UpstreamController {
 		}
 	}
 
-	public void validate(Long id, String name, Long idStrategy, List<Long> servers, List<Integer> ports,
+	public void validate(Long id, String name, String additionalLines, Long idStrategy, List<Long> servers,
+						 List<Integer> ports,
 						 Long idResourceIdentifier, Long idNginx) {
 		this.result.use(Results.json())
 				.from(FormValidation.newBuilder()
 								.toUnordenedList(upstreamRepository.validateBeforeSaveOrUpdate(
-										new Upstream(id, name, new Strategy(idStrategy),
+										new Upstream(id, name, additionalLines, new Strategy(idStrategy),
 												new ResourceIdentifier(idResourceIdentifier), new Nginx(idNginx)),
 										convert(servers, ports))),
 						"errors")
@@ -118,17 +119,18 @@ public class UpstreamController {
 	}
 
 	@Post
-	public void saveOrUpdate(Long id, String name, Long idStrategy, List<Long> servers, List<Integer> ports,
-							 Long idNginx) {
+	public void saveOrUpdate(Long id, String name, String additionalLines, Long idStrategy, List<Long> servers,
+							 List<Integer> ports, Long idNginx) {
 
 		if (id == null) {
 			ResourceIdentifier resourceIdentifier = resourceIdentifierRepository.create();
-			NginxResponse nginxResponse = nginxAgentRunner.createUpstream(idNginx, resourceIdentifier.getUuid(), name,
+			NginxResponse nginxResponse = nginxAgentRunner.createUpstream(
+					idNginx, resourceIdentifier.getUuid(), name, additionalLines,
 					strategy(new Strategy(idStrategy)), endpoints(servers, ports));
 			if (nginxResponse.success()) {
 				OperationResult operationResult = upstreamRepository.saveOrUpdate(
-						new Upstream(id, name, new Strategy(idStrategy), resourceIdentifier, new Nginx(idNginx)),
-						convert(servers, ports));
+						new Upstream(id, name, additionalLines, new Strategy(idStrategy), resourceIdentifier,
+								new Nginx(idNginx)), convert(servers, ports));
 				this.result.include("operation", operationResult.getOperationType());
 				this.result.redirectTo(this).edit(idNginx, operationResult.getId());
 			} else {
@@ -137,12 +139,13 @@ public class UpstreamController {
 			}
 		} else {
 			Upstream upstream = upstreamRepository.load(new Upstream(id));
-			NginxResponse nginxResponse = nginxAgentRunner.updateUpstream(idNginx,
-					upstream.getResourceIdentifier().getUuid(), name, strategy(new Strategy(idStrategy)),
-					endpoints(servers, ports));
+			NginxResponse nginxResponse = nginxAgentRunner.updateUpstream(
+					idNginx, upstream.getResourceIdentifier().getUuid(), name, additionalLines,
+					strategy(new Strategy(idStrategy)), endpoints(servers, ports));
 			if (nginxResponse.success()) {
-				OperationResult operationResult = upstreamRepository.saveOrUpdate(new Upstream(id, name,
-								new Strategy(idStrategy), upstream.getResourceIdentifier(), new Nginx(idNginx)),
+				OperationResult operationResult = upstreamRepository.saveOrUpdate(new Upstream(id,
+								name, additionalLines, new Strategy(idStrategy), upstream.getResourceIdentifier(),
+								new Nginx(idNginx)),
 						convert(servers, ports));
 				this.result.include("operation", operationResult.getOperationType());
 				this.result.redirectTo(this).edit(idNginx, operationResult.getId());

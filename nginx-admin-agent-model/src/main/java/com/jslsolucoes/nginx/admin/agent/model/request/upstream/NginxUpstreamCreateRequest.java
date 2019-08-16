@@ -1,22 +1,25 @@
 package com.jslsolucoes.nginx.admin.agent.model.request.upstream;
 
-import java.util.List;
-
 import com.jslsolucoes.nginx.admin.agent.model.Endpoint;
+
+import java.util.List;
 
 public class NginxUpstreamCreateRequest {
 
-	private String name;
-	private String uuid;
-	private String strategy;
+	private String         name;
+	private String         additionalLines;
+	private String         uuid;
+	private String         strategy;
 	private List<Endpoint> endpoints;
 
 	public NginxUpstreamCreateRequest() {
 
 	}
 
-	public NginxUpstreamCreateRequest(String name, String uuid, String strategy, List<Endpoint> endpoints) {
+	public NginxUpstreamCreateRequest(String name, String additionalLines, String uuid, String strategy,
+									  List<Endpoint> endpoints) {
 		this.name = name;
+		this.additionalLines = additionalLines;
 		this.uuid = uuid;
 		this.strategy = strategy;
 		this.endpoints = endpoints;
@@ -28,6 +31,14 @@ public class NginxUpstreamCreateRequest {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAdditionalLines() {
+		return additionalLines;
+	}
+
+	public void setAdditionalLines(String additionalLines) {
+		this.additionalLines = additionalLines;
 	}
 
 	public String getUuid() {

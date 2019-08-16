@@ -1,18 +1,17 @@
 package com.jslsolucoes.nginx.admin.agent.resource.impl;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.util.List;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-
 import com.jslsolucoes.file.system.FileSystemBuilder;
 import com.jslsolucoes.nginx.admin.agent.config.Configuration;
 import com.jslsolucoes.nginx.admin.agent.model.Endpoint;
 import com.jslsolucoes.nginx.admin.agent.model.FileObject;
 import com.jslsolucoes.nginx.admin.agent.model.FileObjectBuilder;
 import com.jslsolucoes.template.TemplateBuilder;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.List;
 
 @RequestScoped
 public class NginxUpstreamResourceImpl {
@@ -29,19 +28,9 @@ public class NginxUpstreamResourceImpl {
 		this.configuration = configuration;
 	}
 
-	public NginxOperationResult create(String name, String uuid, String strategy, List<Endpoint> endpoints) {
-		return createOrUpdate(name, uuid, strategy, endpoints);
-	}
-
-	private NginxOperationResult createOrUpdate(String name, String uuid, String strategy, List<Endpoint> endpoints) {
-		try(FileWriter fileWriter = new FileWriter(upstream(uuid))) {
-			TemplateBuilder.newBuilder().withClasspathTemplate("/template/nginx/dynamic", "upstream.tpl")
-					.withData("name", name).withData("strategy", strategy).withData("endpoints", endpoints)
-					.withOutput(fileWriter).process();
-			return new NginxOperationResult(NginxOperationResultType.SUCCESS);
-		} catch (Exception e) {
-			return new NginxOperationResult(NginxOperationResultType.ERROR, e);
-		}
+	public NginxOperationResult create(String name, String additionalLines, String uuid, String strategy,
+									   List<Endpoint> endpoints) {
+		return createOrUpdate(name, additionalLines, uuid, strategy, endpoints);
 	}
 
 	public NginxOperationResult delete(String uuid) {
@@ -53,8 +42,9 @@ public class NginxUpstreamResourceImpl {
 		}
 	}
 
-	public NginxOperationResult update(String uuid, String name, String strategy, List<Endpoint> endpoints) {
-		return createOrUpdate(name, uuid, strategy, endpoints);
+	public NginxOperationResult update(String uuid, String name, String additionalLines, String strategy,
+									   List<Endpoint> endpoints) {
+		return createOrUpdate(name, additionalLines, uuid, strategy, endpoints);
 	}
 
 	public FileObject read(String uuid) {
@@ -66,6 +56,19 @@ public class NginxUpstreamResourceImpl {
 
 		} catch (Exception e) {
 			return null;
+		}
+	}
+
+	private NginxOperationResult createOrUpdate(String name, String additionalLines, String uuid, String strategy,
+												List<Endpoint> endpoints) {
+		try (FileWriter fileWriter = new FileWriter(upstream(uuid))) {
+			TemplateBuilder.newBuilder().withClasspathTemplate("/template/nginx/dynamic", "upstream.tpl")
+					.withData("name", name).withData("strategy", strategy).withData("endpoints", endpoints)
+					.withData("additionalLines", additionalLines)
+					.withOutput(fileWriter).process();
+			return new NginxOperationResult(NginxOperationResultType.SUCCESS);
+		} catch (Exception e) {
+			return new NginxOperationResult(NginxOperationResultType.ERROR, e);
 		}
 	}
 

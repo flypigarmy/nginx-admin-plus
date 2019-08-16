@@ -1,20 +1,8 @@
 package com.jslsolucoes.nginx.admin.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
@@ -28,6 +16,9 @@ public class Upstream implements Serializable {
 
 	@Column(name = "name")
 	private String name;
+
+	@Column(name = "additional_lines")
+	private String additionalLines;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_strategy")
@@ -51,9 +42,11 @@ public class Upstream implements Serializable {
 		// default constructor
 	}
 
-	public Upstream(Long id, String name, Strategy strategy, ResourceIdentifier resourceIdentifier, Nginx nginx) {
+	public Upstream(Long id, String name, String additionalLines, Strategy strategy,
+					ResourceIdentifier resourceIdentifier, Nginx nginx) {
 		this.id = id;
 		this.name = name;
+		this.additionalLines = additionalLines;
 		this.strategy = strategy;
 		this.resourceIdentifier = resourceIdentifier;
 		this.nginx = nginx;
@@ -63,6 +56,7 @@ public class Upstream implements Serializable {
 		this.id = id;
 	}
 
+	@Deprecated
 	public Upstream(String name, Strategy strategy, Nginx nginx) {
 		this.name = name;
 		this.strategy = strategy;
@@ -83,6 +77,14 @@ public class Upstream implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAdditionalLines() {
+		return additionalLines;
+	}
+
+	public void setAdditionalLines(String additionalLines) {
+		this.additionalLines = additionalLines;
 	}
 
 	public Strategy getStrategy() {

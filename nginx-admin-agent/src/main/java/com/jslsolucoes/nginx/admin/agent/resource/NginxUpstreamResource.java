@@ -1,21 +1,5 @@
 package com.jslsolucoes.nginx.admin.agent.resource;
 
-import javax.inject.Inject;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
-
 import com.jslsolucoes.nginx.admin.agent.auth.AuthHandler;
 import com.jslsolucoes.nginx.admin.agent.error.ErrorHandler;
 import com.jslsolucoes.nginx.admin.agent.model.FileObject;
@@ -27,6 +11,12 @@ import com.jslsolucoes.nginx.admin.agent.model.response.upstream.NginxUpstreamRe
 import com.jslsolucoes.nginx.admin.agent.model.response.upstream.NginxUpstreamUpdateResponse;
 import com.jslsolucoes.nginx.admin.agent.resource.impl.NginxOperationResult;
 import com.jslsolucoes.nginx.admin.agent.resource.impl.NginxUpstreamResourceImpl;
+
+import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+import javax.ws.rs.core.*;
 
 @Path("upstream")
 @ErrorHandler
@@ -48,10 +38,13 @@ public class NginxUpstreamResource {
 
 	@POST
 	public void create(NginxUpstreamCreateRequest nginxUpstreamCreateRequest, @Suspended AsyncResponse asyncResponse,
-			@Context UriInfo uriInfo) {
+					   @Context UriInfo uriInfo) {
 		NginxOperationResult nginxOperationResult = nginxUpstreamResourceImpl.create(
-				nginxUpstreamCreateRequest.getName(), nginxUpstreamCreateRequest.getUuid(),
-				nginxUpstreamCreateRequest.getStrategy(), nginxUpstreamCreateRequest.getEndpoints());
+				nginxUpstreamCreateRequest.getName(),
+				nginxUpstreamCreateRequest.getAdditionalLines(),
+				nginxUpstreamCreateRequest.getUuid(),
+				nginxUpstreamCreateRequest.getStrategy(),
+				nginxUpstreamCreateRequest.getEndpoints());
 		UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
 		uriBuilder.path(nginxUpstreamCreateRequest.getUuid());
 		asyncResponse.resume(Response.created(uriBuilder.build()).entity(
@@ -62,9 +55,11 @@ public class NginxUpstreamResource {
 	@PUT
 	@Path("{uuid}")
 	public void update(@PathParam("uuid") String uuid, NginxUpstreamUpdateRequest nginxUpstreamUpdateRequest,
-			@Suspended AsyncResponse asyncResponse) {
+					   @Suspended AsyncResponse asyncResponse) {
 		NginxOperationResult nginxOperationResult = nginxUpstreamResourceImpl.update(uuid,
-				nginxUpstreamUpdateRequest.getName(), nginxUpstreamUpdateRequest.getStrategy(),
+				nginxUpstreamUpdateRequest.getName(),
+				nginxUpstreamUpdateRequest.getAdditionalLines(),
+				nginxUpstreamUpdateRequest.getStrategy(),
 				nginxUpstreamUpdateRequest.getEndpoints());
 		asyncResponse.resume(Response
 				.ok(new NginxUpstreamUpdateResponse(nginxOperationResult.getOutput(), nginxOperationResult.isSuccess()))

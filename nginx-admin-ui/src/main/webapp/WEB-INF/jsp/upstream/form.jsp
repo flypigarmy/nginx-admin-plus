@@ -28,6 +28,10 @@
 				<html:input name="name" value="${ upstream.name }"
 					placeholder="{upstream.name.placeholder}" required="true"></html:input>
 			</html:formGroup>
+            <html:formGroup required="false" label="{upstream.additionalLines}">
+                <html:textarea name="additionalLines" value="${ upstream.additionalLines }"
+                    placeholder="{upstream.additionalLines.placeholder}" required="false"></html:textarea>
+            </html:formGroup>
 			<html:formGroup label="{upstream.strategy}" required="true">
 				<html:select required="true" name="idStrategy" value="${ upstream.strategy.id }" data="${ strategyList }" var="strategy">
 					<html:option value="${ strategy.id }">${ strategy.name }</html:option>
@@ -39,7 +43,7 @@
 				</html:div>
 			</html:formGroup>
 			<html:formGroup>
-				<html:detailTable atLeast="0" data="${ upstream.servers }" var="upstreamServer" label="{upstream.servers}">
+				<html:detailTable atLeast="0" empty="true" data="${ upstream.servers }" var="upstreamServer" label="{upstream.servers}">
 					<html:detailTableColumn label="{server.ip}" required="true">
 						<html:select value="${ upstreamServer.server.id }" required="true" name="servers[]" data="${ serverList }" var="server">
 							<html:option value="${ server.id }">${ server.ip }</html:option>

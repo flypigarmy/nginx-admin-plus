@@ -16,6 +16,7 @@ public class NginxUpstreamBuilder implements NginxAgentClientApiBuilder {
 	private String endpoint;
 	private String authorizationKey;
 	private String name;
+	private String additionalLines;
 	private String uuid;
 	private String strategy;
 
@@ -30,7 +31,8 @@ public class NginxUpstreamBuilder implements NginxAgentClientApiBuilder {
 
 	@Override
 	public NginxUpstream build() {
-		return new NginxUpstream(scheduledExecutorService, endpoint, authorizationKey, uuid, strategy, endpoints, name);
+		return new NginxUpstream(scheduledExecutorService, endpoint, authorizationKey, uuid,
+				strategy, endpoints, name, additionalLines);
 	}
 
 	public static NginxUpstreamBuilder newBuilder() {
@@ -44,6 +46,11 @@ public class NginxUpstreamBuilder implements NginxAgentClientApiBuilder {
 
 	public NginxUpstreamBuilder withName(String name) {
 		this.name = name;
+		return this;
+	}
+
+	public NginxUpstreamBuilder withAdditionalLines(String additionalLines) {
+		this.additionalLines = additionalLines;
 		return this;
 	}
 
