@@ -121,6 +121,9 @@ public class UpstreamController {
 	@Post
 	public void saveOrUpdate(Long id, String name, String additionalLines, Long idStrategy, List<Long> servers,
 							 List<Integer> ports, Long idNginx) {
+		if (additionalLines != null) {
+			additionalLines = additionalLines.replaceAll("\r\n", "\n");
+		}
 
 		if (id == null) {
 			ResourceIdentifier resourceIdentifier = resourceIdentifierRepository.create();

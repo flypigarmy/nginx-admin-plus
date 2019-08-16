@@ -207,11 +207,15 @@ public class VirtualHostController {
 		AtomicInteger atomicInteger = new AtomicInteger(0);
 		return locations.stream().map(location -> {
 			int pos = atomicInteger.getAndIncrement();
+			String additionalLines = additionalLineses.get(pos);
+			if (additionalLines != null) {
+				additionalLines = additionalLines.replaceAll("\r\n", "\n");
+			}
 			return new Location(location,
 					queuePriorities.get(pos),
 					queueHandlers.get(pos),
 					upstreamName(new Upstream(upstreams.get(pos))),
-					additionalLineses.get(pos));
+					additionalLines);
 		}).collect(Collectors.toList());
 	}
 
