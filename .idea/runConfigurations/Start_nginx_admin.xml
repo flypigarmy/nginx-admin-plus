@@ -2,7 +2,7 @@
   <configuration default="false" name="Start nginx-admin" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.jslsolucoes.nginx.admin.ui.standalone.Main" />
     <module name="nginx-admin-ui-standalone" />
-    <option name="PROGRAM_PARAMETERS" value="-c C:\yizhou\dev\nginx-admin\nginx-admin-ui-standalone\nginx-admin\conf\nginx-admin.conf" />
+    <option name="PROGRAM_PARAMETERS" value="-c $ProjectFileDir$\nginx-admin-ui-standalone\nginx-admin\conf\nginx-admin.conf" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.jslsolucoes.nginx.admin.ui.standalone.*" />
