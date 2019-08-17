@@ -33,7 +33,7 @@ public class DashboardController {
 	public void index(Long idNginx) {
 		this.result.include("nginxOperationalSystemInfoResponse", nginxAgentRunner.os(idNginx));
 		this.result.include("nginxServerInfoResponse", nginxAgentRunner.info(idNginx));
-		// this.result.include("nginxStatusResponse", nginxAgentRunner.statusForNginx(idNginx));
+		this.result.include("nginxStatusResponse", nginxAgentRunner.statusForNginx(idNginx));
 		this.result.include("nginx", nginxRepository.load(new Nginx(idNginx)));
 	}
 

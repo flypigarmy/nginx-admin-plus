@@ -1,22 +1,36 @@
 package com.jslsolucoes.nginx.admin.agent.resource.impl.status;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.jslsolucoes.nginx.admin.agent.config.Configuration;
+import com.jslsolucoes.nginx.admin.nginx.parser.FileContentReader;
+import com.jslsolucoes.nginx.admin.nginx.parser.ServerParser;
+import com.jslsolucoes.nginx.admin.nginx.parser.directive.Directive;
+import com.jslsolucoes.nginx.admin.nginx.parser.directive.VirtualHostDirective;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.File;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequestScoped
 public class NginxStatusDiscover {
 
 	private static final String PATTERN = "([0-9]{1,})\\s([0-9]{1,})\\s([0-9]{1,})";
-	private static Logger logger = LoggerFactory.getLogger(NginxStatusDiscover.class);
+	private static       Logger logger  = LoggerFactory.getLogger(NginxStatusDiscover.class);
+
+	private Configuration configuration;
+
+	@Inject
+	public NginxStatusDiscover(Configuration configuration) {
+		this.configuration = configuration;
+	}
 
 	public NginxStatus status() {
 		String response = response();
@@ -35,7 +49,7 @@ public class NginxStatusDiscover {
 	private String response() {
 		Client client = ClientBuilder.newClient();
 		try {
-			Response response = client.target("http://localhost").path("status").request().get();
+			Response response = client.target("http://localhost:" + port()).path("status").request().get();
 			if (response.getStatusInfo().equals(Status.OK)) {
 				return response.readEntity(String.class);
 			} else {
@@ -104,4 +118,31 @@ public class NginxStatusDiscover {
 		}
 		return 0;
 	}
+
+	/**
+	 * listen port from root.conf
+	 *
+	 * @return listen port
+	 */
+	private Integer port() {
+		String setting = configuration.getNginx().getSetting();
+		String root = setting + "/virtual-host/root.conf";
+		String content = FileContentReader.content(new File(root));
+		ServerParser serverParser = new ServerParser(content);
+		if (!serverParser.accepts()) {
+			return 80;
+		}
+		List<Directive> directives = serverParser.parse();
+		Directive directive = directives.stream()
+				.filter(t -> t instanceof VirtualHostDirective)
+				.findFirst()
+				.orElse(null);
+		if (directive == null) {
+			return 80;
+		}
+		VirtualHostDirective virtualHostDirective = (VirtualHostDirective) directive;
+		Integer port = virtualHostDirective.getPort();
+		return port == null ? 80 : port;
+	}
+
 }

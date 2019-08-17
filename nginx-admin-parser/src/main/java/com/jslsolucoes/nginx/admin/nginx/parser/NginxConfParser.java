@@ -35,7 +35,7 @@ public class NginxConfParser {
 
 	public List<Directive> parse() {
 		List<Directive> directives = new ArrayList<>();
-		Matcher includes = Pattern.compile("include (.*)/(.*);").matcher(content(new File(conf)));
+		Matcher includes = Pattern.compile("include (.*)/(.*);").matcher(FileContentReader.content(new File(conf)));
 		while (includes.find()) {
 			String directory = includes.group(1).trim();
 			File include = new File(directory);
@@ -44,7 +44,7 @@ public class NginxConfParser {
 			if (include.exists()) {
 				String pattern = includes.group(2).trim().replaceAll("\\*", "\\.\\*");
 				for (File file : FileUtils.listFiles(include, new RegexFileFilter(pattern), TrueFileFilter.TRUE)) {
-					for (Parser parser : parsers(content(file))) {
+					for (Parser parser : parsers(FileContentReader.content(file))) {
 						if (parser.accepts()) {
 							includeFilesCount++;
 							List<Directive> directiveList = parser.parse();
@@ -66,16 +66,4 @@ public class NginxConfParser {
 		return Arrays.asList(new UpstreamParser(fileContent), new ServerParser(fileContent));
 	}
 
-	/**
-	 * remove comment lines and DOS2UNIX
-	 */
-	private String content(File file) {
-		try {
-			return FileUtils.readFileToString(file, "UTF-8")
-					.replaceAll("\\#(.*)", "")
-					.replaceAll("\r\n", "\n");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 }
