@@ -47,9 +47,7 @@ build process will generate some source code via JAXB.
 
 ## user guide
 
-The default user for nginx admin ui manager is:
-- Login :    admin
-- Password : admin
+- [nginx admin plus manual](docs/nginx-admin-plus-manual.md)
 
 ## debug guide
 
