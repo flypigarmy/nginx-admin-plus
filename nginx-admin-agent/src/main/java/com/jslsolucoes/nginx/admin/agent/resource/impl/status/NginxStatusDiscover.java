@@ -27,6 +27,10 @@ public class NginxStatusDiscover {
 
 	private Configuration configuration;
 
+	@Deprecated
+	public NginxStatusDiscover() {
+	}
+
 	@Inject
 	public NginxStatusDiscover(Configuration configuration) {
 		this.configuration = configuration;
