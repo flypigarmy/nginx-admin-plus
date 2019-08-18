@@ -70,7 +70,7 @@ after nginx admin ui is installed, got to [http://localhost:4000](http://localho
 login page
 
 
-![login page](/images/login.png)
+![login page](./images/login.png)
 
 > default user/password is `admin`/`admin`, password change is required after first login.
 
@@ -78,11 +78,11 @@ login page
 
 after login, goto [Nginx nodes] for manage nginx admin agent nodes.
 
-![add nginx node](/images/nginx-nodes.png)
+![add nginx node](./images/nginx-nodes.png)
 
 add nginx admin agent
 
-![nginx agent node configuration](/images/nginx-agent-config.png)
+![nginx agent node configuration](./images/nginx-agent-config.png)
 
 > agent authorization key  should match with `NGINX_ADMIN_AGENT_AUTHORIZATION_KEY` value set in agent configuration file
 
@@ -90,16 +90,16 @@ add nginx admin agent
 
 select agent for manage configurations
 
-![select agent session](/images/select-agent-session.png)
+![select agent session](./images/select-agent-session.png)
 
 
 ### virtual host config
 
 goto virtual host config
-![goto virtual host config](/images/goto-virtual-host-config.png)
+![goto virtual host config](./images/goto-virtual-host-config.png)
 
 virtual host config
-![virtual host configuration](/images/virtual-host-config.png)
+![virtual host configuration](./images/virtual-host-config.png)
 
 > you may set transaction queue size/ set queue priority and handler for each location. additionalLines for self define configurations.
 
@@ -109,7 +109,7 @@ virtual host config
 
 upstream config
 
-![upstream configuration](/images/upstream-config.png)
+![upstream configuration](./images/upstream-config.png)
 
 > you may forward servers in upstream, additionalLines for self define configurations also available here.
 
@@ -123,7 +123,7 @@ dashboard page show basic config and status of nginx, you can also manage nginx 
 - reload
 
 dashboard page
-![dashboard page](/images/dashboard-page.png)
+![dashboard page](./images/dashboard-page.png)
 
 
 
