@@ -8,7 +8,7 @@ original fork from [nginx-admin](https://github.com/jslsolucoes/nginx-admin).
 more configurations items support
 - [x] listen port for root server
 - [x] self defined listen port for HTTP/HTTPS
-- [x] transaction queue size and queue priority configuration for nginx plugin (link TBD)
+- [x] transaction queue size and queue priority settings for [Transaction Queue for the ngx_lua](https://github.com/openresty-community/lua-resty-transaction-queue)
 - [x] additionalLine for self define configuration in
     - location
     - upstream
