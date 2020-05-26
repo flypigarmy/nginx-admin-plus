@@ -43,7 +43,7 @@
 				</html:div>
 			</html:formGroup>
 			<html:formGroup>
-				<html:detailTable atLeast="0" empty="true" data="${ upstream.servers }" var="upstreamServer" label="{upstream.servers}">
+				<html:detailTable atLeast="1" data="${ upstream.servers }" var="upstreamServer" label="{upstream.servers}">
 					<html:detailTableColumn label="{server.ip}" required="true">
 						<html:select value="${ upstreamServer.server.id }" required="true" name="servers[]" data="${ serverList }" var="server">
 							<html:option value="${ server.id }">${ server.ip }</html:option>
