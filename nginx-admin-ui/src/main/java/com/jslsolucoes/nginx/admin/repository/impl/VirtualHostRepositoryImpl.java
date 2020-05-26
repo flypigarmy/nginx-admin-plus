@@ -98,6 +98,9 @@ public class VirtualHostRepositoryImpl extends RepositoryImpl<VirtualHost> imple
 			if (virtualHost.getId() != null) {
 				predicates.add(criteriaBuilder.notEqual(root.get(VirtualHost_.id), virtualHost.getId()));
 			}
+
+			predicates.add(criteriaBuilder.equal(root.get(VirtualHost_.listenPort), virtualHost.getListenPort()));
+
 			criteriaQuery.distinct(true).where(predicates.toArray(new Predicate[] {}));
 			return entityManager.createQuery(criteriaQuery).getSingleResult();
 		} catch (NoResultException noResultException) {
