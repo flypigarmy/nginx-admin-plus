@@ -98,6 +98,7 @@ public class VirtualHostController {
 
 	@Path("edit/{idNginx}/{id}")
 	public void edit(Long idNginx, Long id) {
+		this.result.include("isEdit", true);
 		this.result.include("virtualHost", virtualHostRepository.load(new VirtualHost(id)));
 		this.result.forwardTo(this).form(idNginx);
 	}

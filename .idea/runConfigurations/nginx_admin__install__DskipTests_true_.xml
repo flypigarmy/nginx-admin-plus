@@ -7,14 +7,15 @@
           <option name="checksumPolicy" value="NOT_SET" />
           <option name="failureBehavior" value="NOT_SET" />
           <option name="localRepository" value="" />
-          <option name="mavenHome" value="C:/apache-maven-3.5.4-bin/apache-maven-3.5.4" />
+          <option name="mavenHome" value="E:/eclipse/maven" />
           <option name="nonRecursive" value="false" />
           <option name="outputLevel" value="INFO" />
           <option name="pluginUpdatePolicy" value="DEFAULT" />
           <option name="printErrorStackTraces" value="false" />
           <option name="threads" />
+          <option name="updateIndicesOnProjectOpen" value="true" />
           <option name="usePluginRegistry" value="false" />
-          <option name="userSettingsFile" value="C:\yizhou\dev\nginx-admin\settings.xml" />
+          <option name="userSettingsFile" value="D:\JavaCode\nginx_admin_plus\nginx-admin-plus\settings.xml" />
           <option name="workOffline" value="false" />
         </MavenGeneralSettings>
       </option>

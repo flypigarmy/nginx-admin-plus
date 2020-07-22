@@ -29,7 +29,7 @@
 					placeholder="{upstream.name.placeholder}" required="true"></html:input>
 			</html:formGroup>
             <html:formGroup required="false" label="{upstream.additionalLines}">
-                <html:textarea name="additionalLines" value="${ upstream.additionalLines }"
+                <html:textarea name="additionalLines" value="${ !isEdit ? 'sticky expires=1h;' : upstream.additionalLines }"
                     placeholder="{upstream.additionalLines.placeholder}" required="false"></html:textarea>
             </html:formGroup>
 			<html:formGroup label="{upstream.strategy}" required="true">
@@ -51,7 +51,11 @@
 					</html:detailTableColumn>
 					<html:detailTableColumn label="{upstream.server.port}" required="true">
 						<html:input value="${ upstreamServer.port }" name="ports[]" type="number" maxLength="99999"
-							placeholder="{upstream.server.port.placeholder}" required="true"></html:input>
+									placeholder="{upstream.server.port.placeholder}" required="true"></html:input>
+					</html:detailTableColumn>
+					<html:detailTableColumn label="{upstream.server.additionalOption}">
+						<html:input value="${ !isEdit ? 'max_fails=3 fail_timeout=60s weight=3' : upstreamServer.additionalOption }" name="additionalOptions[]"
+									placeholder="{upstream.server.additionalOption.placeholder}"></html:input>
 					</html:detailTableColumn>
 				</html:detailTable>
 			</html:formGroup>

@@ -19,60 +19,72 @@ import javax.persistence.Table;
 @SequenceGenerator(name = "upstream_server_sq", initialValue = 1, allocationSize = 1, sequenceName = "upstream_server_sq")
 public class UpstreamServer implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "upstream_server_sq")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "upstream_server_sq")
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_upstream")
-	private Upstream upstream;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_upstream")
+    private Upstream upstream;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_server")
-	private Server server;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_server")
+    private Server server;
 
-	@Column(name = "port")
-	private Integer port;
+    @Column(name = "port")
+    private Integer port;
 
-	public UpstreamServer() {
-		// default constructor
-	}
+    @Column(name = "additionalOption")
+    private String additionalOption;
 
-	public UpstreamServer(Server server, Integer port) {
-		this.server = server;
-		this.port = port;
-	}
+    public UpstreamServer() {
+        // default constructor
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public UpstreamServer(Server server, Integer port, String additionalOption) {
+        this.server = server;
+        this.port = port;
+        this.additionalOption = additionalOption == null ? "" : additionalOption;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Upstream getUpstream() {
-		return upstream;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setUpstream(Upstream upstream) {
-		this.upstream = upstream;
-	}
+    public Upstream getUpstream() {
+        return upstream;
+    }
 
-	public Server getServer() {
-		return server;
-	}
+    public void setUpstream(Upstream upstream) {
+        this.upstream = upstream;
+    }
 
-	public void setServer(Server server) {
-		this.server = server;
-	}
+    public Server getServer() {
+        return server;
+    }
 
-	public Integer getPort() {
-		return port;
-	}
+    public void setServer(Server server) {
+        this.server = server;
+    }
 
-	public void setPort(Integer port) {
-		this.port = port;
-	}
+    public Integer getPort() {
+        return port;
+    }
 
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+
+    public String getAdditionalOption() {
+        return additionalOption;
+    }
+
+    public void setAdditionalOption(String additionalOption) {
+        this.additionalOption = additionalOption;
+    }
 }

@@ -15,14 +15,14 @@ server {
           
        	server_name <#list aliases as alias> ${ alias } </#list>;
 
-        #set_by_lua_file $queue_size ../lualib/ob/ob_queue_set.lua ${ queueSize?c };
+        <#if queueSize??>set_by_lua_file $queue_size ../lualib/ob/ob_queue_set.lua ${ queueSize?c };</#if>
 
     <#list locations as location>
     	
     	location ${ location.path } {
-            #set $queue_priority ${ location.queuePriority?c };
-            #set $queue_handler ${ location.queueHandler };
-            #content_by_lua_file ../lualib/ob/ob_que_handle.lua;
+            <#if location.queuePriority??>set $queue_priority ${ location.queuePriority?c };</#if>
+            <#if location.$queue_handler??>set $queue_handler ${ location.queueHandler };</#if>
+            <#if location.$queue_handler??>content_by_lua_file ../lualib/ob/ob_que_handle.lua;</#if>
 
             <#if location.upstream??>proxy_pass  http://${ location.upstream };</#if>
 

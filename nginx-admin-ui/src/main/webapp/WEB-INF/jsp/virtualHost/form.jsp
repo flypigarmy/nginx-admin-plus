@@ -51,10 +51,10 @@
                     placeholder="{virtualHost.listenPort.placeholder}" required="true"></html:input>
             </html:formGroup>
 
-            <html:formGroup label="{virtualHost.queueSize}" required="true">
+            <html:formGroup label="{virtualHost.queueSize}">
                 <html:input value="${ virtualHost.queueSize }" name="queueSize"
                     type="number" maxLength="10"
-                    placeholder="{virtualHost.queueSize.placeholder}" required="true"></html:input>
+                    placeholder="{virtualHost.queueSize.placeholder}"></html:input>
             </html:formGroup>
 
 			<html:formGroup>
@@ -75,16 +75,16 @@
 							value="${ virtualHostLocation.path }"
 							placeholder="{virtualHost.location.placeholder}" required="true"></html:input>
 					</html:detailTableColumn>
-					<html:detailTableColumn label="{virtualHost.queuePriority}" required="true">
+					<html:detailTableColumn label="{virtualHost.queuePriority}">
 						<html:input name="queuePriorities[]"
 							value="${ virtualHostLocation.queuePriority }"
 							type="number"
-							placeholder="{virtualHost.queuePriority.placeholder}" required="true"></html:input>
+							placeholder="{virtualHost.queuePriority.placeholder}"></html:input>
 					</html:detailTableColumn>
-					<html:detailTableColumn label="{virtualHost.queueHandler}" required="true">
+					<html:detailTableColumn label="{virtualHost.queueHandler}">
 						<html:input name="queueHandlers[]"
 							value="${ virtualHostLocation.queueHandler }"
-							placeholder="{virtualHost.queueHandler.placeholder}" required="true"></html:input>
+							placeholder="{virtualHost.queueHandler.placeholder}"></html:input>
 					</html:detailTableColumn>
 					<html:detailTableColumn label="{upstream.name}" required="false">
 						<html:select required="false" name="upstreams[]"
@@ -95,7 +95,7 @@
 					</html:detailTableColumn>
 					<html:detailTableColumn label="{virtualHost.additionalLines}" required="false">
                         <html:textarea name="additionalLineses[]"
-                            value="${ virtualHostLocation.additionalLines }"
+                            value="${ !isEdit ? 'proxy_connect_timeout 3s;' : virtualHostLocation.additionalLines }"
                             placeholder="{virtualHost.additionalLines.placeholder}" required="false"></html:textarea>
 					</html:detailTableColumn>
 				</html:detailTable>
